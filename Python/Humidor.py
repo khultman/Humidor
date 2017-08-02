@@ -10,6 +10,7 @@
 from smbus2 import SMBus
 import time
 from SI7021 import SI7021
+from TCA9548A import TCA9548A
 
 # The I2C Bus ID
 busID = 1
@@ -26,7 +27,11 @@ chan5 = 0x09
 chan6 = 0x10
 chan7 = 0x11
 
+multiplexor = TCA9548A(SMBus(busID))
 sensor = SI7021(SMBus(busID))
+
+multiplexor.select_channel(0)
+
 temp_c = sensor.get_temperature_c()
 temp_f = sensor.get_temperature_f()
 humidity = sensor.get_humidity()
@@ -34,11 +39,7 @@ humidity = sensor.get_humidity()
 
 
 
-def selectChannel(channel = chan0):
-	smbus = smbus.SMBus(busID)
-	bus.write_byte(TCA9548A, 0x00)
-	sleep()
-	bus.write_byte(TCA9548A, channel)
+
 
 
 print("Relative Humidity is : %.2f %%" %humidity)
