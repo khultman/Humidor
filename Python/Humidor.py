@@ -9,7 +9,7 @@
 
 from smbus2 import SMBus
 import time
-import SI7021
+from SI7021 import SI7021
 
 # The I2C Bus ID
 busID = 1

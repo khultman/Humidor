@@ -2,7 +2,7 @@
 from time import sleep
 
 
-class TCA9548A:
+class TCA9548A(object):
 	# Multiplexer address
 	TCA9548A = 0x70
 
