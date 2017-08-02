@@ -27,12 +27,14 @@ class SI7021(object):
 		self.sleep = sleep_interval
 
 	def get_firmware(self):
+		self.reset()
 		self.bus.write_i2c_block_data(self.si7021, 0, self.READ_FIRMWARE)
 		sleep(self.sleep)
 		firmware = self.bus.read_i2c_block_data(self.si7021, 0)
 		return firmware
 
 	def get_temperature_c(self):
+		self.reset()
 		self.bus.write_byte(self.si7021, self.READ_TEMP_NH)
 		sleep(self.sleep)
 		temp = self.bus.read_word_data(self.si7021, self.READ_TEMP_PREV)
@@ -46,6 +48,7 @@ class SI7021(object):
 		return temp
 
 	def get_humidity(self):
+		self.reset()
 		# Hold master mode not working reliably
 		#humidity = self.bus.read_word_data(self.si7021, self.READ_HUMIDITY_HM)
 		#humidity = ((humidity & 0xff) << 8) | (humidity >> 8)
@@ -56,3 +59,8 @@ class SI7021(object):
 		h2 = self.bus.read_byte(self.si7021)
 		humidity = ((h1 * 256 + h2) * 125 / 65536.0) - 6
 		return humidity
+
+	def reset(self):
+		self.bus.write_byte(self.si7021, self.DEV_RESET)
+		sleep(self.sleep)
+
