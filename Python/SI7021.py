@@ -46,8 +46,13 @@ class SI7021(object):
 		return temp
 
 	def get_humidity(self):
+		# Hold master mode not working reliably
+		#humidity = self.bus.read_word_data(self.si7021, self.READ_HUMIDITY_HM)
+		#humidity = ((humidity & 0xff) << 8) | (humidity >> 8)
+		#humidity = 125. * humidity  / 65536. - 6
 		self.bus.write_byte(self.si7021, self.READ_HUMIDITY_NH)
-		humidity = self.bus.read_word_data(self.si7021, self.READ_HUMIDITY_HM)
-		humidity = ((humidity & 0xff) << 8) | (humidity >> 8)
-		humidity = 125. * humidity  / 65536. - 6
+		sleep(self.sleep)
+		h1 = self.bus.read_byte(self.si7021)
+		h2 = self.bus.read_byte(self.si7021)
+		humidity = ((h1 * 256 + h2) * 125 / 65536.0) - 6
 		return humidity
