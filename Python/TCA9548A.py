@@ -16,9 +16,28 @@ class TCA9548A(object):
 	chan6 = 0x10
 	chan7 = 0x11
 
-	def __init__(self, bus, sleep_interval = SLEEP_INTERVAL):
+	def __init__(self, bus, sleep_interval = SLEEP_INTERVAL, tca9548a = TCA9548A):
 		self.bus = bus
-		self.tca9548a = TCA9548A
+		self.tca9548a = tca9548a
 		self.sleep = sleep_interval
 
-	def select_channel(channel = 0):
+	def select_channel(self, channel = 0):
+		if channel == 1:
+			self.bus.write_byte(self.tca9548a, self.chan1)
+		elif channel == 2:
+			self.bus.write_byte(self.tca9548a, self.chan2)
+		elif channel == 3:
+			self.bus.write_byte(self.tca9548a, self.chan3)
+		elif channel == 4:
+			self.bus.write_byte(self.tca9548a, self.chan4)
+		elif channel == 5:
+			self.bus.write_byte(self.tca9548a, self.chan5)
+		elif channel == 6:
+			self.bus.write_byte(self.tca9548a, self.chan6)
+		elif channel == 7:
+			self.bus.write_byte(self.tca9548a, self.chan7)
+		else:
+			self.bus.write_byte(self.tca9548a, self.chan0)
+		sleep(self.sleep)
+
+
