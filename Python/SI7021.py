@@ -46,6 +46,7 @@ class SI7021(object):
 		return temp
 
 	def get_humidity(self):
+		self.bus.write_byte(self.si7021, self.READ_HUMIDITY_NH)
 		humidity = self.bus.read_word_data(self.si7021, self.READ_HUMIDITY_HM)
 		humidity = ((humidity & 0xff) << 8) | (humidity >> 8)
 		humidity = 125. * humidity  / 65536. - 6

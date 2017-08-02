@@ -41,6 +41,6 @@ def selectChannel(channel = chan0):
 	bus.write_byte(TCA9548A, channel)
 
 
-print "Relative Humidity is : %.2f %%" %humidity
-print "Temperature in Celsius is : %.2f C" %temp_c
-print "Temperature in Fahrenheit is : %.2f F" %temp_f
+print("Relative Humidity is : %.2f %%" %humidity)
+print("Temperature in Celsius is : %.2f C" %temp_c)
+print("Temperature in Fahrenheit is : %.2f F" %temp_f)
