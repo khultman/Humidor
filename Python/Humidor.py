@@ -30,18 +30,17 @@ chan7 = 0x11
 multiplexor = TCA9548A(SMBus(busID))
 sensor = SI7021(SMBus(busID))
 
-multiplexor.select_channel(0)
 
-temp_c = sensor.get_temperature_c()
-temp_f = sensor.get_temperature_f()
-humidity = sensor.get_humidity()
+def read(channel = 0):
+	multiplexor.select_channel(channel)
+	temp_c = sensor.get_temperature_c()
+	temp_f = sensor.get_temperature_f()
+	humidity = sensor.get_humidity()
+	print("Statistics for sensor on channel : " channel)
+	print("Relative Humidity is : %.2f %%" %humidity)
+	print("Temperature in Celsius is : %.2f C" %temp_c)
+	print("Temperature in Fahrenheit is : %.2f F" %temp_f)
+	print("")
 
-
-
-
-
-
-
-print("Relative Humidity is : %.2f %%" %humidity)
-print("Temperature in Celsius is : %.2f C" %temp_c)
-print("Temperature in Fahrenheit is : %.2f F" %temp_f)
+for i in range(0, 2):
+	read(i)
