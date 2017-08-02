@@ -6,6 +6,8 @@ class TCA9548A(object):
 	# Multiplexer address
 	TCA9548A = 0x70
 
+	SLEEP_INTERVAL = 0.3
+
 	# Channels (May be wrong)
 	chan0 = 0x04
 	chan1 = 0x05
