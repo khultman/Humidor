@@ -36,11 +36,11 @@ def read(channel = 0):
 	temp_c = sensor.get_temperature_c()
 	temp_f = sensor.get_temperature_f()
 	humidity = sensor.get_humidity()
-	print("Statistics for sensor on channel : " channel)
+	print("Statistics for sensor on channel : %d" %channel)
 	print("Relative Humidity is : %.2f %%" %humidity)
 	print("Temperature in Celsius is : %.2f C" %temp_c)
 	print("Temperature in Fahrenheit is : %.2f F" %temp_f)
 	print("")
 
-for i in range(0, 2):
+for i in range(0, 3):
 	read(i)
