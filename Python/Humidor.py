@@ -68,9 +68,9 @@ def disp_sensor_data(humidity = 0, temp_f = 0):
 
 
 def get_sensor_data():
-	temp_c = [None]*sensors
-	temp_f = [None]*sensors
-	humidity = [None]*sensors
+	temp_c = [None]*(sensors + 1)
+	temp_f = [None]*(sensors + 1)
+	humidity = [None]*(sensors + 1)
 	temp_c[sensors] = 0
 	temp_f[sensors] = 0
 	humidity[sensors] = 0
