@@ -205,6 +205,14 @@ class SSD1306Base(object):
         add = 0xb0|add
         self.command(add)
 
+    def hard_clear(self):
+        for x in [0, 1, 2, 3, 4, 5, 6, 7]:
+            self.set_pageaddress(x)
+            self.set_columnaddress(x)
+            for j in range(0, 0x80):
+                self._gpio.set_high(self._dc)
+                self._spi.write(0)
+
     def image(self, image):
         """Set buffer to value of Python Imaging Library image.  The image should
         be in 1 bit mode and a size equal to the display size.
