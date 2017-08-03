@@ -68,6 +68,9 @@ def disp_sensor_data(humidity = 0, temp_f = 0):
 
 
 def get_sensor_data():
+	temp_c = []
+	temp_f = []
+	humidity = []
 	temp_c[sensors] = 0
 	temp_f[sensors] = 0
 	humidity[sensors] = 0
