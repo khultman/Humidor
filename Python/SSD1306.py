@@ -164,7 +164,8 @@ class SSD1306Base(object):
 
     def display(self):
         """Write display buffer to physical display."""
-        self.command(SSD1306_COLUMNADDR)
+        #self.command(SSD1306_COLUMNADDR)
+        self.comman(0x10)
         self.command(0)              # Column start address. (0 = reset)
         self.command(self.width-1)   # Column end address.
         self.command(SSD1306_PAGEADDR)
@@ -388,23 +389,21 @@ class SSD1306_64_48(SSD1306Base):
         #self.command(0x14)                                  # Chargepump - removed VCC logic for 64x48
         #self.command(SSD1306_MEMORYMODE)                    # 0x20
         #self.command(0x00)                                  # 0x0 act like ks0108
+        self.command(SSD1306_NORMALDISPLAY)                 # 0xA6
+        self.command(SSD1306_DISPLAYALLON_RESUME)           # 0xA4
+
         self.command(SSD1306_SEGREMAP | 0x1)
         self.command(SSD1306_COMSCANDEC)
         self.command(SSD1306_SETCOMPINS)                    # 0xDA
         self.command(0x12)                                  # 0x12 should work for 64x48
         self.command(SSD1306_SETCONTRAST)                   # 0x81
         if self._vccstate == SSD1306_EXTERNALVCC:
-            self.command(0x9F)                               
+            self.command(0x8F)                               
         else:
             self.command(0xCF)                              
-        #self.command(0x8F)                                  # Contrast for 64x48 - removed VCC Logic
+        
         self.command(SSD1306_SETPRECHARGE)                  # 0xd9
-        if self._vccstate == SSD1306_EXTERNALVCC:
-            self.command(0x22)
-        else:
-            self.command(0xF1)
-        #self.command(0xF1)                                  # Removed VCC Logic for precharge
+        self.command(0xF1)
         self.command(SSD1306_SETVCOMDETECT)                 # 0xDB
         self.command(0x40)
-        self.command(SSD1306_DISPLAYALLON_RESUME)           # 0xA4
-        self.command(SSD1306_NORMALDISPLAY)                 # 0xA6
+        
