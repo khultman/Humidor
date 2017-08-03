@@ -367,7 +367,7 @@ class SSD1306_64_48(SSD1306Base):
                  spi=None, i2c_bus=None, i2c_address=SSD1306_I2C_ADDRESS,
                  i2c=None):
         # Call base class constructor.
-        super(SSD1306_128_64, self).__init__(128, 64, rst, dc, sclk, din, cs,
+        super(SSD1306_64_48, self).__init__(64, 48, rst, dc, sclk, din, cs,
                                              gpio, spi, i2c_bus, i2c_address, i2c)
 
     def _initialize(self):
