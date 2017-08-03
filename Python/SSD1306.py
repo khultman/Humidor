@@ -210,8 +210,10 @@ class SSD1306Base(object):
             self.set_pageaddress(x)
             self.set_columnaddress(x)
             for j in range(0, 0x80):
-                self._gpio.set_high(self._dc)
-                self._spi.write(0)
+                if self._spi is not None:
+                    self._gpio.set_high(self._dc)
+                    self._spi.write(0)
+
 
     def image(self, image):
         """Set buffer to value of Python Imaging Library image.  The image should
