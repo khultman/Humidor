@@ -164,10 +164,12 @@ class SSD1306Base(object):
 
     def display(self):
         """Write display buffer to physical display."""
-        self.command(0x00)
-        self.command(0x10)
-        self.command(0x20)
-        self.command(0)
+
+        # set column address
+        self.set_columnaddress(0)
+
+        # set memory mode
+        self.set_memorymode(0)
 
         self.command(0x21)
         self.command(0)              # Column start address. (0 = reset)
@@ -175,7 +177,8 @@ class SSD1306Base(object):
 
         self.command(0x22)
         self.command(0)              # Page start address. (0 = reset)
-        self.command(self._pages-1)  # Page end address.
+        self.command(self._pages)  # Page end address.
+
         # Write buffer data.
         if self._spi is not None:
             # Set DC high for data.
@@ -186,6 +189,15 @@ class SSD1306Base(object):
             for i in range(0, len(self._buffer), 16):
                 control = 0x40   # Co = 0, DC = 0
                 self._i2c.writeList(control, self._buffer[i:i+16])
+
+
+    def set_columnaddress(self, add = 0):
+        self.command((0x10|(add>>4))+0x02)
+        self.command(0x0f&add)
+
+    def set_memorymode(self, mode = 0):
+        self.command(0x20)
+        self.command(0)
 
     def image(self, image):
         """Set buffer to value of Python Imaging Library image.  The image should
