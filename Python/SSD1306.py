@@ -206,13 +206,20 @@ class SSD1306Base(object):
         self.command(add)
 
     def hard_clear(self):
-        for x in [0, 1, 2, 3, 4, 5, 6, 7]:
-            self.set_pageaddress(x)
-            self.set_columnaddress(x)
+        for n in [0, 1, 2, 3, 4, 5, 6, 7]:
+            self.set_pageaddress(n)
+            self.set_columnaddress(n)
             for j in range(0, 0x80):
                 if self._spi is not None:
-                    self._gpio.set_high(self._dc)
-                    self._spi.write(0)
+                    self.spi_send(0)
+
+    def spi_send(self, data):
+        # Write buffer data.
+        if self._spi is not None:
+            # Set DC high for data.
+            self._gpio.set_high(self._dc)
+            # Write buffer.
+            self._spi.write(self._buffer)
 
 
     def image(self, image):
