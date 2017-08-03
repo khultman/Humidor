@@ -91,7 +91,7 @@ class SSD1306Base(object):
         if spi is not None:
             self._log.debug('Using hardware SPI')
             self._spi = spi
-            self._spi.set_clock_hz(8000000)
+            self._spi.set_clock_hz(10000000)
         # Handle software SPI
         elif sclk is not None and din is not None and cs is not None:
             self._log.debug('Using software SPI')
@@ -381,11 +381,11 @@ class SSD1306_64_48(SSD1306Base):
         self.command(0x0)                                   # no offset
         self.command(SSD1306_SETSTARTLINE | 0x0)            # line #0
         self.command(SSD1306_CHARGEPUMP)                    # 0x8D
-        # if self._vccstate == SSD1306_EXTERNALVCC:
-        #     self.command(0x10)
-        # else:
-        #    self.command(0x14)
-        self.command(0x14)                                  # Chargepump - removed VCC logic for 64x48
+        if self._vccstate == SSD1306_EXTERNALVCC:
+            self.command(0x10)
+        else:
+            self.command(0x14)
+        #self.command(0x14)                                  # Chargepump - removed VCC logic for 64x48
         #self.command(SSD1306_MEMORYMODE)                    # 0x20
         #self.command(0x00)                                  # 0x0 act like ks0108
         self.command(SSD1306_SEGREMAP | 0x1)
@@ -393,17 +393,17 @@ class SSD1306_64_48(SSD1306Base):
         self.command(SSD1306_SETCOMPINS)                    # 0xDA
         self.command(0x12)                                  # 0x12 should work for 64x48
         self.command(SSD1306_SETCONTRAST)                   # 0x81
-        #if self._vccstate == SSD1306_EXTERNALVCC:
-        #    self.command(0x9F)                               
-        #else:
-        #    self.command(0xCF)                              
-        self.command(0x8F)                                  # Contrast for 64x48 - removed VCC Logic
+        if self._vccstate == SSD1306_EXTERNALVCC:
+            self.command(0x9F)                               
+        else:
+            self.command(0xCF)                              
+        #self.command(0x8F)                                  # Contrast for 64x48 - removed VCC Logic
         self.command(SSD1306_SETPRECHARGE)                  # 0xd9
-        #if self._vccstate == SSD1306_EXTERNALVCC:
-        #    self.command(0x22)
-        #else:
-        #    self.command(0xF1)
-        self.command(0xF1)                                  # Removed VCC Logic for precharge
+        if self._vccstate == SSD1306_EXTERNALVCC:
+            self.command(0x22)
+        else:
+            self.command(0xF1)
+        #self.command(0xF1)                                  # Removed VCC Logic for precharge
         self.command(SSD1306_SETVCOMDETECT)                 # 0xDB
         self.command(0x40)
         self.command(SSD1306_DISPLAYALLON_RESUME)           # 0xA4
