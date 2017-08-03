@@ -171,6 +171,8 @@ class SSD1306Base(object):
         # set memory mode
         self.set_memorymode(0)
 
+        self.set_pageaddress(0)
+
         self.command(0x21)
         self.command(0)              # Column start address. (0 = reset)
         self.command(self.width-1)   # Column end address.
@@ -198,6 +200,10 @@ class SSD1306Base(object):
     def set_memorymode(self, mode = 0):
         self.command(0x20)
         self.command(0)
+
+    def set_pageaddress(self, add = 0):
+        add = 0xb0|add
+        self.command(add)
 
     def image(self, image):
         """Set buffer to value of Python Imaging Library image.  The image should
