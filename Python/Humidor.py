@@ -11,6 +11,9 @@ import Adafruit_GPIO.SPI as SPI
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+
+import RPi.GPIO as GPIO
+
 from SI7021 import SI7021
 from SSD1306 import SSD1306_64_48
 from TCA9548A import TCA9548A
@@ -43,7 +46,7 @@ sensor = SI7021(SMBus(busID))
 
 degS = u'\N{DEGREE SIGN}'
 
-def disp_sensor_data(humidity = 0, temp_f = 0):
+def disp_sensor_data(humidity = 0, temp_f = 0, temp_c = 0):
 	disp.begin()
 	disp.clear()
 	disp.display()
@@ -59,12 +62,15 @@ def disp_sensor_data(humidity = 0, temp_f = 0):
 
 	humidity = "{0}%".format(round(humidity, 2))
 	temp_f = "{0}{1}F".format(round(temp_f, 2),degS)
+	temp_c = "{0}{1}C".format(round(temp_c, 2),degS)
 
 	draw = ImageDraw.Draw(image)
 	fontRH = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", fontsize)
 	fontT = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", fontsize-4)
-	draw.text((x+1, top+5),    humidity,  font=fontRH, fill=255)
-	draw.text((x+7, top+26), temp_f, font=fontT, fill=255)
+
+	draw.text((x+1, top+4), humidity,  font=fontRH, fill=255)
+	draw.text((x+6, top+20), temp_f, font=fontT, fill=255)
+	draw.text((x+6, top+30), temp_c, font=fontT, fill=255)
 
 	disp.image(image)
 	disp.display()
@@ -105,19 +111,26 @@ def read(channel = 0):
 	print("Temperature in Fahrenheit is : %.2f F" %temp_f)
 	print("")
 
-sensor_data = get_sensor_data()
-for i in range(0, sensors):
-	print("Sensor data for channel {0}".format(i))
-	print("Relative Humidity is {0}%".format( round(sensor_data[2][i],2) ))
-	print("Temperatur in Celsius is {0}{1} C".format( round(sensor_data[0][i],2), degS ))
-	print("Temperature in Fahrenheit is {0}{1} F".format( round(sensor_data[1][i],2), degS ))
+
+def print_sensor_data(sensor_data = []):
+	for i in range(0, sensors):
+		print("Sensor data for channel {0}".format(i))
+		print("Relative Humidity is {0}%".format( round(sensor_data[2][i],2) ))
+		print("Temperatur in Celsius is {0}{1} C".format( round(sensor_data[0][i],2), degS ))
+		print("Temperature in Fahrenheit is {0}{1} F".format( round(sensor_data[1][i],2), degS ))
+		print("")
+
+	print("Averaged sensor data")
+	print("Relative Humidity is {0}%".format( round(sensor_data[2][sensors],2) ))
+	print("Temperatur in Celsius is {0}{1} C".format( round(sensor_data[0][sensors],2), degS ))
+	print("Temperature in Fahrenheit is {0}{1} F".format( round(sensor_data[1][sensors],2), degS ))
 	print("")
 
-print("Averaged sensor data")
-print("Relative Humidity is {0}%".format( round(sensor_data[2][sensors],2) ))
-print("Temperatur in Celsius is {0}{1} C".format( round(sensor_data[0][sensors],2), degS ))
-print("Temperature in Fahrenheit is {0}{1} F".format( round(sensor_data[1][sensors],2), degS ))
-print("")
-
-disp_sensor_data(sensor_data[2][sensors], sensor_data[1][sensors])
+try:
+	while True:
+		sensor_data = get_sensor_data()
+		print_sensor_data(sensor_data)
+		disp_sensor_data(sensor_data[2][sensors], sensor_data[1][sensors], sensor_data[0][sensors])
+except KeyboardInterrupt:
+	GPIO.cleanup()
 

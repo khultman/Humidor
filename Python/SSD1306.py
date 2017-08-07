@@ -4,6 +4,8 @@
 #
 # Please install the original Adafruit library and dependancies:
 # https://github.com/adafruit/Adafruit_Python_SSD1306
+#
+# - Kyle
 
 
 from __future__ import division
