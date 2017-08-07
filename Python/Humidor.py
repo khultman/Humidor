@@ -49,7 +49,6 @@ sensor = SI7021(SMBus(busID))
 degS = u'\N{DEGREE SIGN}'
 
 logger = logging.getLogger('Humidor.py')
-logger.setLevel('debug')
 
 def disp_sensor_data(humidity = 0, temp_f = 0, temp_c = 0):
 	disp.begin()
@@ -111,10 +110,11 @@ def read(channel = 0):
 	temp_c = sensor.get_temperature_c()
 	temp_f = sensor.get_temperature_f()
 	humidity = sensor.get_humidity()
+	logger.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(channel, temp_c, temp_f, humidity))
 	print("Statistics for sensor on channel : %d" %channel)
-	print("Relative Humidity is : %.2f %%" %humidity)
-	print("Temperature in Celsius is : %.2f C" %temp_c)
-	print("Temperature in Fahrenheit is : %.2f F" %temp_f)
+	print("Relative Humidity is : {0}%".format(round(humidity,2)))
+	print("Temperature in Celsius is : {0}C".format(round(temp_c,2)))
+	print("Temperature in Fahrenheit is : {0}F".format(round(temp_f,2)))
 	print("")
 
 
