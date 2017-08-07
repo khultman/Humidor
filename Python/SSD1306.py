@@ -159,13 +159,13 @@ class SSD1306Base(object):
 
         self.set_pageaddress(0)
 
-        self.command(0x21)
-        self.command(0)              # Column start address. (0 = reset)
-        self.command(self.width-1)   # Column end address.
+        #self.command(0x21)
+        #self.command(0)              # Column start address. (0 = reset)
+        #self.command(self.width-1)   # Column end address.
 
-        self.command(0x22)
-        self.command(0)              # Page start address. (0 = reset)
-        self.command(self._pages)  # Page end address.
+        #self.command(0x22)
+        #self.command(0)              # Page start address. (0 = reset)
+        #self.command(self._pages)  # Page end address.
 
         # Write buffer data.
         if self._spi is not None:
@@ -246,6 +246,12 @@ class SSD1306Base(object):
             raise ValueError('Contrast must be a value from 0 to 255 (inclusive).')
         self.command(SSD1306_SETCONTRAST)
         self.command(contrast)
+
+    def set_invert(self, invert = 0):
+        if invert == 1:
+            self.command(SSD1306_INVERTDISPLAY)
+        else:
+            self.command(SSD1306_NORMALDISPLAY)
 
     def dim(self, dim):
         """Adjusts contrast to dim the display if dim is True, otherwise sets the
