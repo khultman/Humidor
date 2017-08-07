@@ -15,7 +15,7 @@ import Adafruit_GPIO.SPI as SPI
 # Constants
 SSD1306_I2C_ADDRESS = 0x3C    # 011110+SA0+RW - 0x3C or 0x3D
 SSD1306_SETCONTRAST = 0x81
-SSD1306_DISPLAYALLONRESUME = 0xA4
+SSD1306_DISPLAYALLON_RESUME = 0xA4
 SSD1306_DISPLAYALLON = 0xA5
 SSD1306_NORMALDISPLAY = 0xA6
 SSD1306_INVERTDISPLAY = 0xA7
@@ -31,6 +31,8 @@ SSD1306_SETLOWCOLUMN = 0x00
 SSD1306_SETHIGHCOLUMN = 0x10
 SSD1306_SETSTARTLINE = 0x40
 SSD1306_MEMORYMODE = 0x20
+SSD1306_COLUMNADDR = 0x21
+SSD1306_PAGEADDR = 0x22
 SSD1306_COMSCANINC = 0xC0
 SSD1306_COMSCANDEC = 0xC8
 SSD1306_SEGREMAP = 0xA0
@@ -38,17 +40,14 @@ SSD1306_CHARGEPUMP = 0x8D
 SSD1306_EXTERNALVCC = 0x1
 SSD1306_SWITCHCAPVCC = 0x2
 
-SSD1306_COLUMNADDR = 0x21
-SSD1306_PAGEADDR = 0x22
-
 # Scrolling constants
-SSD1306_ACTIVATESCROLL = 0x2F
-SSD1306_DEACTIVATESCROLL = 0x2E
-SSD1306_SETVERTICALSCROLLAREA = 0xA3
-SSD1306_RIGHTHORIZONTALSCROLL = 0x26
-SSD1306_LEFTHORIZONTALSCROLL = 0x27
-SSD1306_VERTICALRIGHTHORIZONTALSCROLL = 0x29
-SSD1306_VERTICALLEFTHORIZONTALSCROLL = 0x2A
+SSD1306_ACTIVATE_SCROLL = 0x2F
+SSD1306_DEACTIVATE_SCROLL = 0x2E
+SSD1306_SET_VERTICAL_SCROLL_AREA = 0xA3
+SSD1306_RIGHT_HORIZONTAL_SCROLL = 0x26
+SSD1306_LEFT_HORIZONTAL_SCROLL = 0x27
+SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL = 0x29
+SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL = 0x2A
 
 
 class SSD1306Base(object):
@@ -78,7 +77,7 @@ class SSD1306Base(object):
         if spi is not None:
             self._log.debug('Using hardware SPI')
             self._spi = spi
-            self._spi.set_clock_hz(10000000)
+            self._spi.set_clock_hz(8000000)
         # Handle software SPI
         elif sclk is not None and din is not None and cs is not None:
             self._log.debug('Using software SPI')
@@ -135,7 +134,6 @@ class SSD1306Base(object):
         self._initialize()
         # Turn on the display.
         self.command(SSD1306_DISPLAYON)
-        self.hard_clear()
 
     def reset(self):
         """Reset the display."""
@@ -168,7 +166,6 @@ class SSD1306Base(object):
             for i in range(0, len(self._buffer), 16):
                 control = 0x40   # Co = 0, DC = 0
                 self._i2c.writeList(control, self._buffer[i:i+16])
-
 
     def image(self, image):
         """Set buffer to value of Python Imaging Library image.  The image should
@@ -208,12 +205,6 @@ class SSD1306Base(object):
             raise ValueError('Contrast must be a value from 0 to 255 (inclusive).')
         self.command(SSD1306_SETCONTRAST)
         self.command(contrast)
-
-    def set_invert(self, invert = 0):
-        if invert == 1:
-            self.command(SSD1306_INVERTDISPLAY)
-        else:
-            self.command(SSD1306_NORMALDISPLAY)
 
     def dim(self, dim):
         """Adjusts contrast to dim the display if dim is True, otherwise sets the
@@ -260,7 +251,7 @@ class SSD1306_64_48(SSD1306Base):
         self.command(0x14)
 
         self.command(SSD1306_NORMALDISPLAY)                 # 0xA6
-        self.command(SSD1306_DISPLAYALLONRESUME)           # 0xA4
+        self.command(SSD1306_DISPLAYALLON_RESUME)           # 0xA4
 
         self.command(SSD1306_SEGREMAP | 0x1)
         self.command(SSD1306_COMSCANDEC)
@@ -297,27 +288,16 @@ class SSD1306_64_48(SSD1306Base):
                 if self._spi is not None:
                     self.data(c)
 
+    def set_invert(self, invert = 0):
+        if invert == 1:
+            self.command(SSD1306_INVERTDISPLAY)
+        else:
+            self.command(SSD1306_NORMALDISPLAY)
+            
     def display(self):
         """Write display buffer to physical display."""
-
-        # set column address
         self.set_columnaddress(0)
-
-        # set memory mode
-        #self.set_memorymode(0)
-
         self.set_pageaddress(0)
-
-        #self.command(0x21)
-        #self.command(0)              # Column start address. (0 = reset)
-        #self.command(self.width-1)   # Column end address.
-
-        #self.command(0x22)
-        #self.command(0)              # Page start address. (0 = reset)
-        #self.command(self._pages)  # Page end address.
-
-        # Write buffer data.
-
         for i in range (6):
             self.set_pageaddress(i)
             self.set_columnaddress(0)
