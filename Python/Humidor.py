@@ -41,6 +41,8 @@ disp = SSD1306_64_48(rst=RST, dc=DC, spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE, max_sp
 multiplexor = TCA9548A(SMBus(busID))
 sensor = SI7021(SMBus(busID))
 
+degS = u'\N{DEGREE SIGN}'
+
 def disp_sensor_data(humidity = 0, temp_f = 0):
 	disp.begin()
 	disp.clear()
@@ -54,8 +56,6 @@ def disp_sensor_data(humidity = 0, temp_f = 0):
 	bottom = height-padding
 	x = padding
 	fontsize = 12
-
-	degS = u'\N{DEGREE SIGN}'
 
 	humidity = "{0}%".format(round(humidity, 2))
 	temp_f = "{0}{1}F".format(round(temp_f, 2),degS)
@@ -108,15 +108,15 @@ def read(channel = 0):
 sensor_data = get_sensor_data()
 for i in range(0, sensors):
 	print("Sensor data for channel {0}".format(i))
-	print("Relative Humidity is {0}%%".format(sensor_data[2][i]))
-	print("Temperatur in Celsius is {0} C".format(sensor_data[0][i]))
-	print("Temperature in Fahrenheit is {0} F".format(sensor_data[1][i]))
+	print("Relative Humidity is {0}%%".format( round(sensor_data[2][i],2) ))
+	print("Temperatur in Celsius is {0}{1} C".format( round(sensor_data[0][i],2), degS ))
+	print("Temperature in Fahrenheit is {0}{1} F".format( round(sensor_data[1][i],2), degS ))
 	print("")
 
 print("Averaged sensor data")
-print("Relative Humidity is {0}%%".format(sensor_data[2][sensors]))
-print("Temperatur in Celsius is {0} C".format(sensor_data[0][sensors]))
-print("Temperature in Fahrenheit is {0} F".format(sensor_data[1][sensors]))
+print("Relative Humidity is {0}%%".format( round(sensor_data[2][sensors],2) ))
+print("Temperatur in Celsius is {0}{1} C".format( round(sensor_data[0][sensors],2), degS ))
+print("Temperature in Fahrenheit is {0}{1} F".format( round(sensor_data[1][sensors],2), degS ))
 print("")
 
 disp_sensor_data(sensor_data[2][sensors], sensor_data[1][sensors])
