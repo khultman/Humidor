@@ -134,6 +134,7 @@ class SSD1306Base(object):
         self._initialize()
         # Turn on the display.
         self.command(SSD1306_DISPLAYON)
+        self.hard_clear()
 
     def reset(self):
         """Reset the display."""
@@ -191,7 +192,7 @@ class SSD1306Base(object):
         add = 0xb0|add
         self.command(add)
 
-    def hard_clear(self, c = 0):
+    def hard_clear(self, c = 0x00):
         for n in [0, 1, 2, 3, 4, 5, 6, 7]:
             self.set_pageaddress(n)
             self.set_columnaddress(n)
@@ -279,32 +280,36 @@ class SSD1306_64_48(SSD1306Base):
     def _initialize(self):
         # 64x48 pixel specific initialization.
         self.command(SSD1306_DISPLAYOFF)                    # 0xAE
+
         self.command(SSD1306_SETDISPLAYCLOCKDIV)            # 0xD5
         self.command(0x80)                                  # the suggested ratio (Same as 128x64)
+
         self.command(SSD1306_SETMULTIPLEX)                  # 0xA8
         self.command(0x2F)                                  # 0x3F -> 0x2F (Change for 64 x 48)
+
         self.command(SSD1306_SETDISPLAYOFFSET)              # 0xD3
         self.command(0x0)                                   # no offset
+
         self.command(SSD1306_SETSTARTLINE | 0x0)            # line #0
+
         self.command(SSD1306_CHARGEPUMP)                    # 0x8D
         self.command(0x14)
-        #self.command(SSD1306_MEMORYMODE)                    # 0x20
-        #self.command(0x00)                                  # 0x0 act like ks0108
+
         self.command(SSD1306_NORMALDISPLAY)                 # 0xA6
         self.command(SSD1306_DISPLAYALLON_RESUME)           # 0xA4
 
         self.command(SSD1306_SEGREMAP | 0x1)
         self.command(SSD1306_COMSCANDEC)
+
         self.command(SSD1306_SETCOMPINS)                    # 0xDA
         self.command(0x12)                                  # 0x12 should work for 64x48
+
         self.command(SSD1306_SETCONTRAST)                   # 0x81
-        if self._vccstate == SSD1306_EXTERNALVCC:
-            self.command(0x8F)                               
-        else:
-            self.command(0xCF)                              
+        self.command(0x8F)                            
         
         self.command(SSD1306_SETPRECHARGE)                  # 0xd9
         self.command(0xF1)
+
         self.command(SSD1306_SETVCOMDETECT)                 # 0xDB
         self.command(0x40)
         
