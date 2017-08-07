@@ -152,23 +152,12 @@ class SSD1306Base(object):
 
     def display(self):
         """Write display buffer to physical display."""
-
-        # set column address
-        self.set_columnaddress(0)
-
-        # set memory mode
-        #self.set_memorymode(0)
-
-        self.set_pageaddress(0)
-
-        #self.command(0x21)
-        #self.command(0)              # Column start address. (0 = reset)
-        #self.command(self.width-1)   # Column end address.
-
-        #self.command(0x22)
-        #self.command(0)              # Page start address. (0 = reset)
-        #self.command(self._pages)  # Page end address.
-
+        self.command(SSD1306_COLUMNADDR)
+        self.command(0)              # Column start address. (0 = reset)
+        self.command(self.width-1)   # Column end address.
+        self.command(SSD1306_PAGEADDR)
+        self.command(0)              # Page start address. (0 = reset)
+        self.command(self._pages-1)  # Page end address.
         # Write buffer data.
         if self._spi is not None:
             # Set DC high for data.
@@ -179,9 +168,6 @@ class SSD1306Base(object):
             for i in range(0, len(self._buffer), 16):
                 control = 0x40   # Co = 0, DC = 0
                 self._i2c.writeList(control, self._buffer[i:i+16])
-
-
-
 
 
     def image(self, image):
@@ -255,6 +241,8 @@ class SSD1306_64_48(SSD1306Base):
 
     def _initialize(self):
         # 64x48 pixel specific initialization.
+        self._buffer = [0x00] * (64*48)
+
         self.command(SSD1306_DISPLAYOFF)                    # 0xAE
 
         self.command(SSD1306_SETDISPLAYCLOCKDIV)            # 0xD5
@@ -307,15 +295,7 @@ class SSD1306_64_48(SSD1306Base):
             self.set_columnaddress(0)
             for j in range(0, 0x80):
                 if self._spi is not None:
-                    self.spi_send(c)
-
-    def spi_send(self, data):
-        # Write buffer data.
-        if self._spi is not None:
-            # Set DC high for data.
-            self._gpio.set_high(self._dc)
-            # Write buffer.
-            self._spi.write(data)
+                    self.data(c)
 
     def display(self):
         """Write display buffer to physical display."""
@@ -337,9 +317,10 @@ class SSD1306_64_48(SSD1306Base):
         #self.command(self._pages)  # Page end address.
 
         # Write buffer data.
+
         for i in range (6):
             self.set_pageaddress(i)
             self.set_columnaddress(0)
             for j in range(0x40):
-                self.spi_send(self._buffer[i*0x40+j])
+                self.data(self._buffer[i*0x40+j])
         
