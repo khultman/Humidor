@@ -55,15 +55,15 @@ def disp_sensor_data(humidity = 0, temp_f = 0):
 	top = padding
 	bottom = height-padding
 	x = padding
-	fontsize = 13
+	fontsize = 14
 
 	humidity = "{0}%".format(round(humidity, 2))
 	temp_f = "{0}{1}F".format(round(temp_f, 2),degS)
 
 	draw = ImageDraw.Draw(image)
 	fontRH = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", fontsize)
-	fontT = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", fontsize-3)
-	draw.text((x, top+5),    humidity,  font=fontRH, fill=255)
+	fontT = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", fontsize-4)
+	draw.text((x+1, top+5),    humidity,  font=fontRH, fill=255)
 	draw.text((x+7, top+26), temp_f, font=fontT, fill=255)
 
 	disp.image(image)
