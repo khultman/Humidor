@@ -155,7 +155,7 @@ class SSD1306Base(object):
         self.set_columnaddress(0)
 
         # set memory mode
-        self.set_memorymode(0)
+        #self.set_memorymode(0)
 
         self.set_pageaddress(0)
 
@@ -181,7 +181,7 @@ class SSD1306Base(object):
 
     def set_columnaddress(self, add = 0):
         self.command((0x10|(add>>4))+0x02)
-        self.command(0x0f&add)
+        self.command((0x0f&add))
 
     def set_memorymode(self, mode = 0):
         self.command(0x20)
@@ -191,13 +191,13 @@ class SSD1306Base(object):
         add = 0xb0|add
         self.command(add)
 
-    def hard_clear(self):
+    def hard_clear(self, c = 0):
         for n in [0, 1, 2, 3, 4, 5, 6, 7]:
             self.set_pageaddress(n)
             self.set_columnaddress(n)
             for j in range(0, 0x80):
                 if self._spi is not None:
-                    self.spi_send(0)
+                    self.spi_send(c)
 
     def spi_send(self, data):
         # Write buffer data.
