@@ -8,6 +8,8 @@
 
 import Adafruit_GPIO.SPI as SPI
 
+import logging
+
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -45,6 +47,9 @@ multiplexor = TCA9548A(SMBus(busID))
 sensor = SI7021(SMBus(busID))
 
 degS = u'\N{DEGREE SIGN}'
+
+logger = logging.getLogger('Humidor.py')
+logger.setLevel('debug')
 
 def disp_sensor_data(humidity = 0, temp_f = 0, temp_c = 0):
 	disp.begin()
@@ -89,6 +94,7 @@ def get_sensor_data():
 		temp_c[i] = sensor.get_temperature_c()
 		temp_f[i] = sensor.get_temperature_f()
 		humidity[i] = sensor.get_humidity()
+		logger.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(i, temp_c[i], temp_f[i], humidity[i]))
 		temp_c[sensors] += temp_c[i]
 		temp_f[sensors] += temp_f[i]
 		humidity[sensors] += humidity[i]
