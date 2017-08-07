@@ -1,8 +1,10 @@
-# Completely ripped from Adafruit
+# This is a fork of the Adafruit SSD1306 driver
+# for use with the Sparkfun Micro OLED breakout
+# see: https://www.sparkfun.com/products/13003
+#
+# Please install the original Adafruit library and dependancies:
 # https://github.com/adafruit/Adafruit_Python_SSD1306
-# for local inclusion in this project
-# heavily bastardized
-# still not working
+
 
 from __future__ import division
 import logging
@@ -220,7 +222,7 @@ class SSD1306Base(object):
                 contrast = 0xCF
 
 
-
+# 
 class SSD1306_64_48(SSD1306Base):
     def __init__(self, rst, dc=None, sclk=None, din=None, cs=None, gpio=None,
                  spi=None, i2c_bus=None, i2c_address=SSD1306_I2C_ADDRESS,
@@ -293,7 +295,7 @@ class SSD1306_64_48(SSD1306Base):
             self.command(SSD1306_INVERTDISPLAY)
         else:
             self.command(SSD1306_NORMALDISPLAY)
-            
+
     def display(self):
         """Write display buffer to physical display."""
         self.set_columnaddress(0)
