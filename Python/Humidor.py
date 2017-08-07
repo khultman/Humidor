@@ -55,8 +55,10 @@ def disp_sensor_data(humidity = 0, temp_f = 0):
 	x = padding
 	fontsize = 12
 
-	humidity = "{0}% RH".format(round(humidity, 2))
-	temp_f = "{0} deg F".format(round(temp_f, 2))
+	degS = u'\N{DEGREE SIGN}'
+
+	humidity = "{0}%".format(round(humidity, 2))
+	temp_f = "{0}{1}F".format(round(temp_f, 2),degS)
 
 	draw = ImageDraw.Draw(image)
 	fontRH = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", fontsize)
