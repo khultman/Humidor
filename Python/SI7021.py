@@ -1,4 +1,4 @@
-
+import logging
 from time import sleep
 
 class SI7021(object):
@@ -25,28 +25,36 @@ class SI7021(object):
 		self.bus = bus
 		self.si7021 = si7021
 		self.sleep = sleep_interval
+		self._log = logging.getLogger('SI7021.SI7021')
 
-	def get_firmware(self):
+	# This doesn't work, here as a placeholder
+	def _dontcall_get_firmware(self):
 		self.reset()
 		self.bus.write_i2c_block_data(self.si7021, 0, self.READ_FIRMWARE)
 		sleep(self.sleep)
 		firmware = self.bus.read_i2c_block_data(self.si7021, 0)
 		return firmware
 
+	# Read the temp from the sensor
 	def get_temperature_c(self):
 		self.reset()
 		self.bus.write_byte(self.si7021, self.READ_TEMP_NH)
 		sleep(self.sleep)
 		temp = self.bus.read_word_data(self.si7021, self.READ_TEMP_PREV)
+		self._log.debug("Temp raw value :: {0}".format(temp))
 		temp = ((temp & 0xff) << 8) | (temp >> 8)
 		temp = 175.72 * temp / 65536. - 46.85
+		self._log.debug("Temp computed value :: {0}".format(temp))
 		return temp
 
+	# Shorthand for computing to fahrenheit
 	def get_temperature_f(self):
 		temp = self.get_temperature_c()
 		temp = temp * 1.8 + 32
+		self._log.debug("Temp computed value fahrenheit :: {0}".format(temp))
 		return temp
 
+	# Read the humidity from the sensor
 	def get_humidity(self):
 		self.reset()
 		# Hold master mode not working reliably
@@ -57,7 +65,9 @@ class SI7021(object):
 		sleep(self.sleep)
 		h1 = self.bus.read_byte(self.si7021)
 		h2 = self.bus.read_byte(self.si7021)
+		self._log.debug("Raw humidity data :: {0} & {1}".format(h1,h2))
 		humidity = ((h1 * 256 + h2) * 125 / 65536.0) - 6
+		self._log.debug("Computed humidity data :: {0}".format(humidity))
 		return humidity
 
 	def reset(self):

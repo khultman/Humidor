@@ -3,15 +3,13 @@
 from Humidor import Humidor
 
 import argparse
-import logging
+from logger import MLOGGER
 
 import RPi.GPIO as GPIO
 
 import time
 
 
-# Setup logging
-parser = argparse.ArgumentParser()
 
 threshold = getattr(logging, loglevel.upper(), None)
 if not isinstance(threshold, int):
@@ -37,11 +35,38 @@ SPI_DEVICE = 0
 # Sensors must start on channel 0 and increment from there
 sensors = 3
 
-humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
-try:
-	while True:
-		sensor_data = humidor.get_sensor_data()
-		humidor.print_sensor_data()
-		humidor.disp_avg_sensor_data()
-except KeyboardInterrupt:
-	GPIO.cleanup()
+def get_cli_args(args=None):
+	parser = argparse.ArgumentParser(description='Run the Humidor service')
+	parser.add_argument('-lv', '--loglevel',
+						type=str,
+						help='Log Level {INFO,DEBUG,ERROR} Default = INFO',
+						choices={'INFO', 'DEBUG', 'ERROR'},
+						default='INFO')
+	parser.add_argument('-lt', '--logtype',
+						type=str,
+						help='Log to  {CONSOLE,FILE,BOTH,NONE} Default = CONSOLE',
+						choices={'CONSOLE', 'FILE', 'BOTH', 'NONE'},
+						default='CONSOLE')
+	parser.add_argument('-lf', '--logfile',
+						type=str,
+						help='Log filename Default = Humidor.log',
+						default='Humidor.log')
+	results = parser.parse_args(args)
+	return (results.loglevel,
+			results.logtype,
+			reults.logfile)
+
+
+
+
+if __name__ == '__main__':
+	loglevel, logtype, logfile = get_cli_args(sys.argv[1:])
+	logger = MLOGGER('Humidor_Service', level=loglevel, logtype=logtype, filename=logfile)
+	humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
+	try:
+		while True:
+			sensor_data = humidor.get_sensor_data()
+			humidor.print_sensor_data()
+			humidor.disp_avg_sensor_data()
+	except KeyboardInterrupt:
+		GPIO.cleanup()
