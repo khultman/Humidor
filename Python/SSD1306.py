@@ -63,6 +63,7 @@ class SSD1306Base(object):
                  gpio=None, spi=None, i2c_bus=None, i2c_address=SSD1306_I2C_ADDRESS,
                  i2c=None):
         self._log = logging.getLogger('Adafruit_SSD1306.SSD1306Base')
+        self._logging_variables['instance_id'] = self.__class__.__name__
         self._spi = None
         self._i2c = None
         self.width = width
@@ -79,19 +80,19 @@ class SSD1306Base(object):
             self._gpio.setup(self._rst, GPIO.OUT)
         # Handle hardware SPI
         if spi is not None:
-            self._log.debug('Using hardware SPI')
+            self._log.debug('Using hardware SPI', self._logging_variables)
             self._spi = spi
             self._spi.set_clock_hz(8000000)
         # Handle software SPI
         elif sclk is not None and din is not None and cs is not None:
-            self._log.debug('Using software SPI')
+            self._log.debug('Using software SPI', self._logging_variables)
             self._spi = SPI.BitBang(self._gpio, sclk, din, None, cs)
         # Handle hardware I2C
         elif i2c is not None:
-            self._log.debug('Using hardware I2C with custom I2C provider.')
+            self._log.debug('Using hardware I2C with custom I2C provider.', self._logging_variables)
             self._i2c = i2c.get_i2c_device(i2c_address)
         else:
-            self._log.debug('Using hardware I2C with platform I2C provider.')
+            self._log.debug('Using hardware I2C with platform I2C provider.', self._logging_variables)
             import Adafruit_GPIO.I2C as I2C
             if i2c_bus is None:
                 self._i2c = I2C.get_i2c_device(i2c_address)

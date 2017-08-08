@@ -39,6 +39,7 @@ if sys.version_info[0] < 3:
 class Humidor(object):
 	def __init__(self, i2cBUS = busID, sensors = sensors, rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE):
 		self._log = logging.getLogger(__name__)
+		self._logging_variables['instance_id'] = self.__class__.__name__
 		self._degS = u'\N{DEGREE SIGN}'
 		self._busID = i2cBUS
 		self._rst = rst
@@ -103,7 +104,7 @@ class Humidor(object):
 			temp_c[i] = self._sensor.get_temperature_c()
 			temp_f[i] = self._sensor.get_temperature_f()
 			humidity[i] = self._sensor.get_humidity()
-			self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(i, temp_c[i], temp_f[i], humidity[i]))
+			self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(i, temp_c[i], temp_f[i], humidity[i]), self._logging_variables)
 			temp_c[self.sensors] += temp_c[i]
 			temp_f[self.sensors] += temp_f[i]
 			humidity[self.sensors] += humidity[i]
@@ -121,7 +122,7 @@ class Humidor(object):
 		temp_c = self._sensor.get_temperature_c()
 		temp_f = self._sensor.get_temperature_f()
 		humidity = self._sensor.get_humidity()
-		self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(channel, temp_c, temp_f, humidity))
+		self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(channel, temp_c, temp_f, humidity), self._logging_variables)
 		print("Statistics for sensor on channel : {0}".format(channel))
 		print("Relative Humidity is : {0}%".format(round(humidity,2)))
 		print("Temperature in Fahrenheit is : {0}F".format(round(temp_f,2)))

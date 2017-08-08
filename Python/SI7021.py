@@ -26,6 +26,7 @@ class SI7021(object):
 		self.si7021 = si7021
 		self.sleep = sleep_interval
 		self._log = logging.getLogger(__name__)
+		self._logging_variables['instance_id'] = self.__class__.__name__
 
 	# This doesn't work, here as a placeholder
 	def _dontcall_get_firmware(self):
@@ -41,17 +42,17 @@ class SI7021(object):
 		self.bus.write_byte(self.si7021, self.READ_TEMP_NH)
 		sleep(self.sleep)
 		temp = self.bus.read_word_data(self.si7021, self.READ_TEMP_PREV)
-		self._log.debug("Temp raw value :: {0}".format(temp))
+		self._log.debug("Temp raw value :: {0}".format(temp), self._logging_variables)
 		temp = ((temp & 0xff) << 8) | (temp >> 8)
 		temp = 175.72 * temp / 65536. - 46.85
-		self._log.debug("Temp computed value :: {0}".format(temp))
+		self._log.debug("Temp computed value :: {0}".format(temp), self._logging_variables)
 		return temp
 
 	# Shorthand for computing to fahrenheit
 	def get_temperature_f(self):
 		temp = self.get_temperature_c()
 		temp = temp * 1.8 + 32
-		self._log.debug("Temp computed value fahrenheit :: {0}".format(temp))
+		self._log.debug("Temp computed value fahrenheit :: {0}".format(temp), self._logging_variables)
 		return temp
 
 	# Read the humidity from the sensor
@@ -65,9 +66,9 @@ class SI7021(object):
 		sleep(self.sleep)
 		h1 = self.bus.read_byte(self.si7021)
 		h2 = self.bus.read_byte(self.si7021)
-		self._log.debug("Raw humidity data :: {0} & {1}".format(h1,h2))
+		self._log.debug("Raw humidity data :: {0} & {1}".format(h1,h2), self._logging_variables)
 		humidity = ((h1 * 256 + h2) * 125 / 65536.0) - 6
-		self._log.debug("Computed humidity data :: {0}".format(humidity))
+		self._log.debug("Computed humidity data :: {0}".format(humidity), self._logging_variables)
 		return humidity
 
 	def reset(self):

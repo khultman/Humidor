@@ -14,8 +14,8 @@ class MLOGGER:
 	def __create_stream_handler(level):
 		handler = StreamHandler()
 		handler.setLevel(level)
-		#handler.setFormatter(
-		#	Formatter('%(asctime)s - %(levelname)s - %(instance_id)s - %(message)s', '%Y-%m-%d %H:%M:%S'))
+		handler.setFormatter(
+			Formatter('%(asctime)s - %(levelname)s - %(instance_id)s - %(message)s', '%Y-%m-%d %H:%M:%S'))
 		return handler
 
 	@staticmethod
@@ -23,8 +23,8 @@ class MLOGGER:
 		filename_path = str(os.path.dirname(os.path.realpath(__file__))) + '/' + str(filename)
 		fileHandler = FileHandler(filename_path, mode='w')
 		fileHandler.setLevel(level)
-		#fileHandler.setFormatter(
-		#	Formatter('%(asctime)s - %(levelname)s - %(instance_id)s - %(message)s', '%Y-%m-%d %H:%M:%S'))
+		fileHandler.setFormatter(
+			Formatter('%(asctime)s - %(levelname)s - %(instance_id)s - %(message)s', '%Y-%m-%d %H:%M:%S'))
 		return fileHandler
 
 	def __init__(self, name, level=INFO, logtype='CONSOLE', filename=None):
