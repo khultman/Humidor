@@ -129,14 +129,14 @@ class Humidor(object):
 		for i in range(len(self._sensor_data)-1):
 			print("Sensor data for channel {0}".format(i))
 			print("Relative Humidity is {0}%".format( round(self._sensor_data[2][i],2) ))
-			print("Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS ))
-			print("Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS ))
+			print("Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS.endcode('utf-8') ))
+			print("Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS.endcode('utf-8') ))
 			print("")
 
 		print("Averaged sensor data")
 		print("Relative Humidity is {0}%".format( round(self._sensor_data[2][sensors],2) ))
-		print("Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][sensors],2), self._degS ))
-		print("Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][sensors],2), self._degS ))
+		print("Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][sensors],2), self._degS.endcode('utf-8') ))
+		print("Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][sensors],2), self._degS.endcode('utf-8') ))
 		print("")
 
 
