@@ -27,7 +27,7 @@ class TCA9548A(object):
 		self._logging_variables['instance_id'] = self.__class__.__name__
 
 	def select_channel(self, channel = 0):
-		self._log.debug("Changing TCA9548A multiplexor channel to {0}".format(channel), self._logging_variables)
+		self._log.debug("Changing TCA9548A multiplexor channel to {0}".format(channel), extra=self._logging_variables)
 		if channel == 1:
 			self.bus.write_byte(self.tca9548a, self.chan1)
 		elif channel == 2:
