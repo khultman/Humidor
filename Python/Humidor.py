@@ -22,8 +22,17 @@ from smbus2 import SMBus
 
 import time
 
+# Defaults
+
+busID = 1		# i2c bus ID
+RST = 24		# GPIO of SSD1306 Reset pin
+DC = 23			# GPIO of SSD1306 Display DC
+SPI_PORT = 0	# SPI Port
+SPI_DEVICE = 0	# SPI Device
+sensors = 3		# Number of sensor channels
+
 class Humidor(object):
-	def __init__(self, i2cBUS = 1, sensors = 1, rst = 24, dc = 23, spiPort = 0, spiDevice = 0):
+	def __init__(self, i2cBUS = busID, sensors = sensors, rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE):
 		self._log = logging.getLogger('Humidor.Humidor')
 		self._degS = u'\N{DEGREE SIGN}'
 		self._busID = i2cBUS
@@ -34,7 +43,7 @@ class Humidor(object):
 		self.sensors = sensors
 		self.multiplexor = TCA9548A(SMBus(self._busID), 0.1)
 		self.sensor = SI7021(SMBus(self._busID), 0.1)
-		self.disp = disp = SSD1306_64_48(rst=RST, dc=DC, spi=SPI.SpiDev(self.spiPort, self.spiDevice, max_speed_hz=8000000))
+		self.disp = disp = SSD1306_64_48(rst=self._rst, dc=self._dc, spi=SPI.SpiDev(self._spiPort, self._spiDevice, max_speed_hz=8000000))
 
 	def _clear(self):
 		self._sensor_data = [None] * 3
