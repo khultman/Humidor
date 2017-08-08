@@ -95,9 +95,9 @@ class Humidor(object):
 
 		for i in range(0, sensors):
 			self.multiplexor.select_channel(i)
-			temp_c[i] = sensor.get_temperature_c()
-			temp_f[i] = sensor.get_temperature_f()
-			humidity[i] = sensor.get_humidity()
+			temp_c[i] = self.sensor.get_temperature_c()
+			temp_f[i] = self.sensor.get_temperature_f()
+			humidity[i] = self.sensor.get_humidity()
 			self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(i, temp_c[i], temp_f[i], humidity[i]))
 			temp_c[sensors] += temp_c[i]
 			temp_f[sensors] += temp_f[i]
@@ -113,9 +113,9 @@ class Humidor(object):
 	# Read the sensor data from an individual channel
 	def read(self, channel = 0):
 		self.multiplexor.select_channel(channel)
-		temp_c = sensor.get_temperature_c()
-		temp_f = sensor.get_temperature_f()
-		humidity = sensor.get_humidity()
+		temp_c = self.sensor.get_temperature_c()
+		temp_f = self.sensor.get_temperature_f()
+		humidity = self.sensor.get_humidity()
 		self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(channel, temp_c, temp_f, humidity))
 		print("Statistics for sensor on channel : %d" %channel)
 		print("Relative Humidity is : {0}%".format(round(humidity,2)))
