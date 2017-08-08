@@ -58,14 +58,15 @@ class Humidor_Service(object):
 		mlogger = MLOGGER(None, level=loglevel, logtype=logtype, filename=logfile)
 		humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
 		try:
-			GPIO.setup(DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-			GPIO.add_event_detect(DoorPin, GPIO.FALLING, callback=self.door_open, bouncetime=300)
+			#GPIO.setup(DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+			GPIO.add_event_detect(DoorPin, GPIO.RISING, callback=self.door_open, bouncetime=300)
 			#GPIO.add_event_detect(DoorPin, GPIO.RISING, callback=self.door_closed, bouncetime=300)
 			self._log.debug("Entering main loop", extra=self._logging_variables)
 			while True:
 				sensor_data = humidor.get_sensor_data()
 				humidor.print_sensor_data()
 				humidor.disp_avg_sensor_data()
+				time.sleep(10)
 		except KeyboardInterrupt:
 			GPIO.cleanup()
 
