@@ -62,16 +62,16 @@ class SI7021(object):
 		#humidity = self.bus.read_word_data(self.si7021, self.READ_HUMIDITY_HM)
 		#humidity = ((humidity & 0xff) << 8) | (humidity >> 8)
 		#humidity = 125. * humidity  / 65536. - 6
-		humidity = 0
-		while humidity <= 0:
-			self.reset()
-			self.bus.write_byte(self.si7021, self.READ_HUMIDITY_NH)
-			sleep(self.sleep)
-			h1 = self.bus.read_byte(self.si7021)
-			h2 = self.bus.read_byte(self.si7021)
-			self._log.debug("Raw humidity data :: {0} & {1}".format(h1,h2), extra=self._logging_variables)
-			humidity = ((h1 * 256 + h2) * 125 / 65536.0) - 6
-			self._log.debug("Computed humidity data :: {0}".format(humidity), extra=self._logging_variables)
+		self.reset()
+		self.bus.write_byte(self.si7021, self.READ_HUMIDITY_NH)
+		sleep(self.sleep)
+		h1 = self.bus.read_byte(self.si7021)
+		h2 = self.bus.read_byte(self.si7021)
+		self._log.debug("Raw humidity data :: {0} & {1}".format(h1,h2), extra=self._logging_variables)
+		humidity = ((h1 * 256 + h2) * 125 / 65536.0) - 6
+		self._log.debug("Computed humidity data :: {0}".format(humidity), extra=self._logging_variables)
+		if humidity <= 0:
+			self._log.warn("Humidity reported irrationally, sensor may be damaged or broken. Humidity: {0}".format(humidity), extra=self._logging_variables)
 		return humidity
 
 	def reset(self):
