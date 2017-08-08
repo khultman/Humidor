@@ -20,6 +20,7 @@ from TCA9548A import TCA9548A
 
 from smbus2 import SMBus
 
+import sys
 import time
 
 # Defaults
@@ -30,6 +31,8 @@ DC = 23			# GPIO of SSD1306 Display DC
 SPI_PORT = 0	# SPI Port
 SPI_DEVICE = 0	# SPI Device
 sensors = 3		# Number of sensor channels
+
+sys.setdefaultencoding('utf-8')
 
 class Humidor(object):
 	def __init__(self, i2cBUS = busID, sensors = sensors, rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE):
@@ -129,8 +132,8 @@ class Humidor(object):
 		for i in range(len(self._sensor_data)-1):
 			sc = "Sensor data for channel {0}".format(i)
 			rh = "Relative Humidity is {0}%".format(round(self._sensor_data[2][i],2))
-			tc = "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS.endcode('ascii') )
-			tf = "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS ).endcode('utf-8')
+			tc = "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS )
+			tf = "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS )
 			print( sc )
 			print( rh )
 			print( tc )
@@ -138,8 +141,8 @@ class Humidor(object):
 			print("")
 
 		rha = "Relative Humidity is {0}%".format( round(self._sensor_data[2][sensors],2) )
-		tca = "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][sensors],2), self._degS ).endcode('utf-8')
-		tfa = "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][sensors],2), self._degS ).endcode('utf-8')
+		tca = "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][sensors],2), self._degS )
+		tfa = "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][sensors],2), self._degS )
 		print("Averaged sensor data")
 		print( rha )
 		print( tca )
