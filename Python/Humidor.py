@@ -32,8 +32,9 @@ SPI_PORT = 0	# SPI Port
 SPI_DEVICE = 0	# SPI Device
 sensors = 3		# Number of sensor channels
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info[0] < 3:
+	reload(sys)
+	sys.setdefaultencoding('utf-8')
 
 class Humidor(object):
 	def __init__(self, i2cBUS = busID, sensors = sensors, rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE):
