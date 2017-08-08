@@ -40,7 +40,7 @@ Pin 27	::	BCM-00	(ID_SD)			::	NC
 Pin 28	::	BCM-01	(ID_SC)			::	NC
 Pin 29	::	BCM-05					::	Door open Sensor
 Pin 30	::	Ground					::	Ground BUS
-Pin 31	::	BCM-06					::	NC
+Pin 31	::	BCM-06					::	PIR Sensor Output
 Pin 32	::	BCM-12	(PWM-0)			::	NC
 Pin 33	::	BCM-13	(PWM-1)			::	NC
 Pin 34	::	Ground					::	Ground BUS

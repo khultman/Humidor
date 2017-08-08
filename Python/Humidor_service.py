@@ -18,6 +18,7 @@ SPI_PORT = 0		# SPI Port
 SPI_DEVICE = 0		# SPI Device
 sensors = 3			# The number of sensors, min 1 max 8; corresponds to TCA9548 Channels; Sensors must start on channel 0 and increment from there
 DoorPin = 5			# GPIO of Door Sensor
+PirSensor = 6		# GPIO of PIR Sensor
 
 
 class Humidor_Service(object):
@@ -50,8 +51,8 @@ class Humidor_Service(object):
 	def door_open(self, channel):
 		self._log.warn("Door Opened, channel {0}".format(channel), extra=self._logging_variables)
 
-	def door_closed(self, channel):
-		self._log.warn("Door Closed, channel {0}".format(channel), extra=self._logging_variables)
+	def motion_detect(self, channel):
+		self._log.warn("PIR Motion detected, channel {0}".format(channel), extra=self._logging_variables)
 
 	def main(self):
 		loglevel, logtype, logfile = self.get_cli_args(sys.argv[1:])
@@ -59,8 +60,9 @@ class Humidor_Service(object):
 		humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
 		try:
 			GPIO.setup(DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+			GPIO.setup(PirSensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 			GPIO.add_event_detect(DoorPin, GPIO.FALLING, callback=self.door_open, bouncetime=300)
-			#GPIO.add_event_detect(DoorPin, GPIO.RISING, callback=self.door_closed, bouncetime=300)
+			GPIO.add_event_detect(DoorPin, GPIO.RISING, callback=self.motion_detect, bouncetime=10000)
 			self._log.debug("Entering main loop", extra=self._logging_variables)
 			while True:
 				sensor_data = humidor.get_sensor_data()
