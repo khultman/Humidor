@@ -56,7 +56,7 @@ class Humidor_Service(object):
 		humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
 		try:
 			GPIO.setup(DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-			GPIO.add_event_detect(DoorPin, GPIO.FALLING, callback=door_open, bouncetime=300)
+			GPIO.add_event_detect(DoorPin, GPIO.FALLING, callback=self.door_open(), bouncetime=300)
 			self._log.debug("Entering main loop", extra=self._logging_variables)
 			while True:
 				sensor_data = humidor.get_sensor_data()
