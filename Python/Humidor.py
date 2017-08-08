@@ -8,7 +8,7 @@
 
 import Adafruit_GPIO.SPI as SPI
 
-from logger import MLOGGER
+import logging
 
 from PIL import Image
 from PIL import ImageDraw
@@ -37,7 +37,7 @@ sys.setdefaultencoding('utf-8')
 
 class Humidor(object):
 	def __init__(self, i2cBUS = busID, sensors = sensors, rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE):
-		self._log = MLOGGER('Humidor.Humidor')
+		self._log = logging.getLogger(__name__)
 		self._degS = u'\N{DEGREE SIGN}'
 		self._busID = i2cBUS
 		self._rst = rst

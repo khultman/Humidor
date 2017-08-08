@@ -22,7 +22,7 @@ class TCA9548A(object):
 		self.bus = bus
 		self.tca9548a = tca9548a
 		self.sleep = sleep_interval
-		self._log = logging.getLogger('TCA9548A.TCA9548A')
+		self._log = logging.getLogger(__name__)
 
 	def select_channel(self, channel = 0):
 		self._log.debug("Changing TCA9548A multiplexor channel to {0}".format(channel))

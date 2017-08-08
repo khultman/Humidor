@@ -41,11 +41,9 @@ def get_cli_args(args=None):
 			results.logfile)
 
 
-
-
-if __name__ == '__main__':
+def main():
 	loglevel, logtype, logfile = get_cli_args(sys.argv[1:])
-	logger = MLOGGER('Humidor_Service', level=loglevel, logtype=logtype, filename=logfile)
+	logger = MLOGGER(None, level=loglevel, logtype=logtype, filename=logfile)
 	humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
 	try:
 		while True:
@@ -54,3 +52,8 @@ if __name__ == '__main__':
 			humidor.disp_avg_sensor_data()
 	except KeyboardInterrupt:
 		GPIO.cleanup()
+
+
+if __name__ == '__main__':
+	main()
+	
