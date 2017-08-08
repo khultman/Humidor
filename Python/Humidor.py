@@ -39,6 +39,7 @@ if sys.version_info[0] < 3:
 class Humidor(object):
 	def __init__(self, i2cBUS = busID, sensors = sensors, rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE):
 		self._log = logging.getLogger(__name__)
+		self._logging_variables = {}
 		self._logging_variables['instance_id'] = self.__class__.__name__
 		self._degS = u'\N{DEGREE SIGN}'
 		self._busID = i2cBUS

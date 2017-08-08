@@ -23,6 +23,7 @@ class TCA9548A(object):
 		self.tca9548a = tca9548a
 		self.sleep = sleep_interval
 		self._log = logging.getLogger(__name__)
+		self._logging_variables = {}
 		self._logging_variables['instance_id'] = self.__class__.__name__
 
 	def select_channel(self, channel = 0):

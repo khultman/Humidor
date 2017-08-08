@@ -26,6 +26,7 @@ class SI7021(object):
 		self.si7021 = si7021
 		self.sleep = sleep_interval
 		self._log = logging.getLogger(__name__)
+		self._logging_variables = {}
 		self._logging_variables['instance_id'] = self.__class__.__name__
 
 	# This doesn't work, here as a placeholder

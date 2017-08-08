@@ -63,6 +63,7 @@ class SSD1306Base(object):
                  gpio=None, spi=None, i2c_bus=None, i2c_address=SSD1306_I2C_ADDRESS,
                  i2c=None):
         self._log = logging.getLogger('Adafruit_SSD1306.SSD1306Base')
+        self._logging_variables = {}
         self._logging_variables['instance_id'] = self.__class__.__name__
         self._spi = None
         self._i2c = None
