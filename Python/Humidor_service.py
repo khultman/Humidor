@@ -45,7 +45,7 @@ def get_cli_args(args=None):
 def main():
 	loglevel, logtype, logfile = get_cli_args(sys.argv[1:])
 	_logging_variables = {}
-	_logging_variables['instance_id'] = 'Humidor_Service.{0}'.format(__name__)
+	_logging_variables['instance_id'] = 'Humidor_Service.'
 	_log = logging.getLogger('Humidor_Service')
 	mlogger = MLOGGER(None, level=loglevel, logtype=logtype, filename=logfile)
 	humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
