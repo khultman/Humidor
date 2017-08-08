@@ -61,7 +61,6 @@ class Humidor_Service(object):
 	def main(self):
 		loglevel, logtype, logfile = self.get_cli_args(sys.argv[1:])
 		mlogger = MLOGGER(None, level=loglevel, logtype=logtype, filename=logfile)
-		#humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
 		try:
 			GPIO.setup(DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 			GPIO.setup(PirSensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -76,7 +75,7 @@ class Humidor_Service(object):
 						self.humidor._disp.turnoff()
 					else:
 						self.screenon += 1
-				#self.humidor.disp_avg_sensor_data()
+						self.humidor.disp_avg_sensor_data()
 				time.sleep(10)
 		except KeyboardInterrupt:
 			GPIO.cleanup()
