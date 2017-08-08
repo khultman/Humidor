@@ -126,7 +126,7 @@ class Humidor(object):
 
 	# Writes the data stored in self._sensor_data to stdout
 	def print_sensor_data(self):
-		for i in range(self._sensor_data.size()-1):
+		for i in range(len(self._sensor_data)-1):
 			print("Sensor data for channel {0}".format(i))
 			print("Relative Humidity is {0}%".format( round(self._sensor_data[2][i],2) ))
 			print("Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS ))
