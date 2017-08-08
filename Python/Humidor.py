@@ -94,7 +94,7 @@ class Humidor(object):
 		humidity[sensors] = 0
 
 		for i in range(0, sensors):
-			multiplexor.select_channel(i)
+			self.multiplexor.select_channel(i)
 			temp_c[i] = sensor.get_temperature_c()
 			temp_f[i] = sensor.get_temperature_f()
 			humidity[i] = sensor.get_humidity()
@@ -112,7 +112,7 @@ class Humidor(object):
 
 	# Read the sensor data from an individual channel
 	def read(self, channel = 0):
-		multiplexor.select_channel(channel)
+		self.multiplexor.select_channel(channel)
 		temp_c = sensor.get_temperature_c()
 		temp_f = sensor.get_temperature_f()
 		humidity = sensor.get_humidity()
