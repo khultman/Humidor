@@ -5,6 +5,7 @@ from Humidor import Humidor
 from logger import MLOGGER
 
 import RPi.GPIO as GPIO
+import sys
 import time
 
 
