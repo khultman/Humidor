@@ -127,16 +127,23 @@ class Humidor(object):
 	# Writes the data stored in self._sensor_data to stdout
 	def print_sensor_data(self):
 		for i in range(len(self._sensor_data)-1):
-			print( "Sensor data for channel {0}".format(i) )
-			print( "Relative Humidity is {0}%".format(round(self._sensor_data[2][i],2)) )
-			print( "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS ).endcode('utf-8') )
-			print( "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS ).endcode('utf-8') )
+			sc = "Sensor data for channel {0}".format(i)
+			rh = "Relative Humidity is {0}%".format(round(self._sensor_data[2][i],2))
+			tc = "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS ).endcode('utf-8')
+			tf = "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS ).endcode('utf-8')
+			print( sc )
+			print( rh )
+			print( tc )
+			print( tf )
 			print("")
 
+		rha = "Relative Humidity is {0}%".format( round(self._sensor_data[2][sensors],2) )
+		tca = "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][sensors],2), self._degS ).endcode('utf-8')
+		tfa = "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][sensors],2), self._degS ).endcode('utf-8')
 		print("Averaged sensor data")
-		print("Relative Humidity is {0}%".format( round(self._sensor_data[2][sensors],2) ))
-		print( "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][sensors],2), self._degS ).endcode('utf-8') )
-		print( "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][sensors],2), self._degS ).endcode('utf-8') )
+		print( rha )
+		print( tca )
+		print( tfa )
 		print("")
 
 
