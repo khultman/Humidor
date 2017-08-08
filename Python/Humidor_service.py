@@ -44,7 +44,7 @@ def get_cli_args(args=None):
 	results = parser.parse_args(args)
 	return (results.loglevel,
 			results.logtype,
-			reults.logfile)
+			results.logfile)
 
 
 
