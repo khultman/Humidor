@@ -48,7 +48,7 @@ class Humidor_Service(object):
 				results.logfile)
 
 	def door_open(self):
-		self._log.debug("Door Opened", extra=self._logging_variables)
+		self._log.warn("Door Opened", extra=self._logging_variables)
 
 	def main(self):
 		loglevel, logtype, logfile = self.get_cli_args(sys.argv[1:])
