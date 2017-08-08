@@ -2,6 +2,7 @@
 import argparse
 
 from Humidor import Humidor
+import logging
 from logger import MLOGGER
 
 import RPi.GPIO as GPIO
@@ -43,9 +44,13 @@ def get_cli_args(args=None):
 
 def main():
 	loglevel, logtype, logfile = get_cli_args(sys.argv[1:])
-	logger = MLOGGER(None, level=loglevel, logtype=logtype, filename=logfile)
+	_logging_variables = {}
+	_logging_variables['instance_id'] = self.__class__.__name__
+	_log = logging.getLogger('Humidor_Service')
+	mlogger = MLOGGER(None, level=loglevel, logtype=logtype, filename=logfile)
 	humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
 	try:
+		_log.debug("Entering main loop", extra=_logging_variables)
 		while True:
 			sensor_data = humidor.get_sensor_data()
 			humidor.print_sensor_data()
