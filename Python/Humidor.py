@@ -24,6 +24,13 @@ from smbus2 import SMBus
 
 import time
 
+# Setup logging
+logger = logging.getLogger('Humidor.py')
+threshold = getattr(logging, loglevel.upper(), None)
+if not isinstance(threshold, int):
+    raise ValueError("Invalid log level: {0}".format(loglevel))
+logger.basicConfig(filename='Humidor.log',level=threshold)
+
 # The I2C Bus ID
 busID = 1
 
@@ -48,7 +55,6 @@ sensor = SI7021(SMBus(busID))
 
 degS = u'\N{DEGREE SIGN}'
 
-logger = logging.getLogger('Humidor.py')
 
 def disp_sensor_data(humidity = 0, temp_f = 0, temp_c = 0):
 	disp.begin()
