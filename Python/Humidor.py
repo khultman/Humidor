@@ -32,6 +32,7 @@ SPI_PORT = 0	# SPI Port
 SPI_DEVICE = 0	# SPI Device
 sensors = 3		# Number of sensor channels
 
+reload(sys)
 sys.setdefaultencoding('utf-8')
 
 class Humidor(object):
