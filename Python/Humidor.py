@@ -123,23 +123,23 @@ class Humidor(object):
 		self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(channel, temp_c, temp_f, humidity))
 		print("Statistics for sensor on channel : {0}".format(channel))
 		print("Relative Humidity is : {0}%".format(round(humidity,2)))
-		print("Temperature in Celsius is : {0}C".format(round(temp_c,2)))
 		print("Temperature in Fahrenheit is : {0}F".format(round(temp_f,2)))
+		print("Temperature in Celsius is : {0}C".format(round(temp_c,2)))
 		print("")
 
 
 	# Writes the data stored in self._sensor_data to stdout
 	def print_sensor_data(self):
 		for i in range(len(self._sensor_data)-1):
-			print( "Sensor data for channel {0}".format(i) )
-			print( "Relative Humidity is {0}%".format(round(self._sensor_data[2][i],2)) )
-			print( "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS ) )
-			print( "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS ) )
+			print("Sensor data for channel {0}".format(i))
+			print("Relative Humidity is {0}%".format(round(self._sensor_data[2][i],2)))
+			print("Temperature in Fahrenheit is {0}{1} F".format(round(self._sensor_data[1][i],2),self._degS))
+			print("Temperature in Celsius is {0}{1} C".format( ound(self._sensor_data[0][i],2), self._degS))
 			print("")
 		print("Averaged sensor data")
-		print( "Relative Humidity is {0}%".format( round(self._sensor_data[2][self.sensors],2) )
-		print( "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][self.sensors],2), self._degS ) )
-		print( "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][self.sensors],2), self._degS ) )
+		print("Relative Humidity is {0}%".format(round(self._sensor_data[2][self.sensors],2)))
+		print("Temperature in Fahrenheit is {0}{1}F".format(round(self._sensor_data[1][self.sensors],2),self._degS))
+		print("Temperature in Celsius is {0}{1}C".format(round(self._sensor_data[0][self.sensors],2),self._degS))
 		print("")
 
 
