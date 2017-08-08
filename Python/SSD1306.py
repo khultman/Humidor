@@ -9,7 +9,7 @@
 
 
 from __future__ import division
-import logging
+from logger import MLOGGER
 import time
 
 import Adafruit_GPIO as GPIO
@@ -62,7 +62,7 @@ class SSD1306Base(object):
     def __init__(self, width, height, rst, dc=None, sclk=None, din=None, cs=None,
                  gpio=None, spi=None, i2c_bus=None, i2c_address=SSD1306_I2C_ADDRESS,
                  i2c=None):
-        self._log = logging.getLogger('Adafruit_SSD1306.SSD1306Base')
+        self._log = MLOGGER('Adafruit_SSD1306.SSD1306Base')
         self._spi = None
         self._i2c = None
         self.width = width
