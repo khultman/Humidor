@@ -45,9 +45,9 @@ class Humidor(object):
 		self._spiPort = spiPort
 		self._spiDevice = spiDevice
 		self.sensors = sensors
-		self.multiplexor = TCA9548A(SMBus(self._busID), 0.1)
-		self.sensor = SI7021(SMBus(self._busID), 0.1)
-		self.disp = disp = SSD1306_64_48(rst=self._rst, dc=self._dc, spi=SPI.SpiDev(self._spiPort, self._spiDevice, max_speed_hz=8000000))
+		self._multiplexor = TCA9548A(SMBus(self._busID), 0.1)
+		self._sensor = SI7021(SMBus(self._busID), 0.1)
+		self._disp = disp = SSD1306_64_48(rst=self._rst, dc=self._dc, spi=SPI.SpiDev(self._spiPort, self._spiDevice, max_speed_hz=8000000))
 
 	def _clear(self):
 		self._sensor_data = [None] * 3
@@ -58,11 +58,11 @@ class Humidor(object):
 
 	# Write the given sensor data to the screen
 	def disp_sensor_data(self, humidity = 0, temp_f = 0, temp_c = 0):
-		disp.begin()
-		disp.clear()
-		disp.display()
-		width = disp.width
-		height = disp.height
+		self._disp.begin()
+		self._disp.clear()
+		self._disp.display()
+		width = self._disp.width
+		height = self._disp.height
 		image = Image.new('1', (width, height))
 
 		padding = 2
@@ -83,45 +83,45 @@ class Humidor(object):
 		draw.text((x+6, top+20), temp_f, font=fontT, fill=255)
 		draw.text((x+6, top+30), temp_c, font=fontT, fill=255)
 
-		disp.image(image)
-		disp.display()
+		self._disp.image(image)
+		self._disp.display()
 
 	# Reads the sensor data from all sensor channels
 	# Returns multidimensional list for external processing
 	# Stores data to self._sensor_data for internal processing
 	def get_sensor_data(self):
-		temp_c = [None]*(sensors + 1)
-		temp_f = [None]*(sensors + 1)
-		humidity = [None]*(sensors + 1)
-		temp_c[sensors] = 0
-		temp_f[sensors] = 0
-		humidity[sensors] = 0
+		temp_c = [None]*(self.sensors + 1)
+		temp_f = [None]*(self.sensors + 1)
+		humidity = [None]*(self.sensors + 1)
+		temp_c[self.sensors] = 0
+		temp_f[self.sensors] = 0
+		humidity[self.sensors] = 0
 
-		for i in range(0, sensors):
-			self.multiplexor.select_channel(i)
-			temp_c[i] = self.sensor.get_temperature_c()
-			temp_f[i] = self.sensor.get_temperature_f()
-			humidity[i] = self.sensor.get_humidity()
+		for i in range(0, self.sensors):
+			self._multiplexor.select_channel(i)
+			temp_c[i] = self._sensor.get_temperature_c()
+			temp_f[i] = self._sensor.get_temperature_f()
+			humidity[i] = self._sensor.get_humidity()
 			self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(i, temp_c[i], temp_f[i], humidity[i]))
-			temp_c[sensors] += temp_c[i]
-			temp_f[sensors] += temp_f[i]
-			humidity[sensors] += humidity[i]
+			temp_c[self.sensors] += temp_c[i]
+			temp_f[self.sensors] += temp_f[i]
+			humidity[self.sensors] += humidity[i]
 
-		temp_c[sensors] = temp_c[sensors] / sensors
-		temp_f[sensors] = temp_f[sensors] / sensors
-		humidity[sensors] = humidity[sensors] / sensors
+		temp_c[self.sensors] = temp_c[self.sensors] / self.sensors
+		temp_f[self.sensors] = temp_f[self.sensors] / self.sensors
+		humidity[self.sensors] = humidity[self.sensors] / self.sensors
 
 		self._sensor_data = [temp_c, temp_f, humidity]
 		return [temp_c, temp_f, humidity]
 
 	# Read the sensor data from an individual channel
 	def read(self, channel = 0):
-		self.multiplexor.select_channel(channel)
-		temp_c = self.sensor.get_temperature_c()
-		temp_f = self.sensor.get_temperature_f()
-		humidity = self.sensor.get_humidity()
+		self._multiplexor.select_channel(channel)
+		temp_c = self._sensor.get_temperature_c()
+		temp_f = self._sensor.get_temperature_f()
+		humidity = self._sensor.get_humidity()
 		self._log.debug("Channel {0}, temp_c {1}, temp_f {2}, humidity {3}".format(channel, temp_c, temp_f, humidity))
-		print("Statistics for sensor on channel : %d" %channel)
+		print("Statistics for sensor on channel : {0}".format(channel))
 		print("Relative Humidity is : {0}%".format(round(humidity,2)))
 		print("Temperature in Celsius is : {0}C".format(round(temp_c,2)))
 		print("Temperature in Fahrenheit is : {0}F".format(round(temp_f,2)))
@@ -131,23 +131,15 @@ class Humidor(object):
 	# Writes the data stored in self._sensor_data to stdout
 	def print_sensor_data(self):
 		for i in range(len(self._sensor_data)-1):
-			sc = "Sensor data for channel {0}".format(i)
-			rh = "Relative Humidity is {0}%".format(round(self._sensor_data[2][i],2))
-			tc = "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS )
-			tf = "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS )
-			print( sc )
-			print( rh )
-			print( tc )
-			print( tf )
+			print( "Sensor data for channel {0}".format(i) )
+			print( "Relative Humidity is {0}%".format(round(self._sensor_data[2][i],2)) )
+			print( "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][i],2), self._degS ) )
+			print( "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][i],2), self._degS ) )
 			print("")
-
-		rha = "Relative Humidity is {0}%".format( round(self._sensor_data[2][sensors],2) )
-		tca = "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][sensors],2), self._degS )
-		tfa = "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][sensors],2), self._degS )
 		print("Averaged sensor data")
-		print( rha )
-		print( tca )
-		print( tfa )
+		print( "Relative Humidity is {0}%".format( round(self._sensor_data[2][self.sensors],2) )
+		print( "Temperatur in Celsius is {0}{1} C".format( round(self._sensor_data[0][self.sensors],2), self._degS ) )
+		print( "Temperature in Fahrenheit is {0}{1} F".format( round(self._sensor_data[1][self.sensors],2), self._degS ) )
 		print("")
 
 
