@@ -67,5 +67,6 @@ class Humidor_Service(object):
 
 
 if __name__ == '__main__':
-	Humidor_Service.main()
+	service = Humidor_Service()
+	service.main()
 	
