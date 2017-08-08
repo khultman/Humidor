@@ -38,7 +38,7 @@ Pin 25	::	Ground					::	Ground BUS
 Pin 26	::	BCM-07	(SPI-0 CE1)		::	NC
 Pin 27	::	BCM-00	(ID_SD)			::	NC
 Pin 28	::	BCM-01	(ID_SC)			::	NC
-Pin 29	::	BCM-05					::	NC
+Pin 29	::	BCM-05					::	Door open Sensor
 Pin 30	::	Ground					::	Ground BUS
 Pin 31	::	BCM-06					::	NC
 Pin 32	::	BCM-12	(PWM-0)			::	NC
