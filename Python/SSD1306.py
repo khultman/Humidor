@@ -300,6 +300,9 @@ class SSD1306_64_48(SSD1306Base):
         else:
             self.command(SSD1306_NORMALDISPLAY)
 
+    def turnoff(self):
+        self.command(SSD1306_DISPLAYOFF)
+    
     def display(self):
         """Write display buffer to physical display."""
         self.set_columnaddress(0)

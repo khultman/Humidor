@@ -26,6 +26,8 @@ class Humidor_Service(object):
 		self._logging_variables = {}
 		self._logging_variables['instance_id'] = self.__class__.__name__
 		self._log = logging.getLogger(self.__class__.__name__)
+		self.humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
+		self.screenon = None
 
 	def get_cli_args(self, args=None):
 		parser = argparse.ArgumentParser(description='Run the Humidor service')
@@ -53,11 +55,13 @@ class Humidor_Service(object):
 
 	def motion_detect(self, channel):
 		self._log.warn("PIR Motion detected, channel {0}".format(channel), extra=self._logging_variables)
+		self.humidor.disp_avg_sensor_data()
+		self.screenon = 1
 
 	def main(self):
 		loglevel, logtype, logfile = self.get_cli_args(sys.argv[1:])
 		mlogger = MLOGGER(None, level=loglevel, logtype=logtype, filename=logfile)
-		humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
+		#humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
 		try:
 			GPIO.setup(DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 			GPIO.setup(PirSensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -65,9 +69,14 @@ class Humidor_Service(object):
 			GPIO.add_event_detect(PirSensor, GPIO.RISING, callback=self.motion_detect, bouncetime=10000)
 			self._log.debug("Entering main loop", extra=self._logging_variables)
 			while True:
-				sensor_data = humidor.get_sensor_data()
-				humidor.print_sensor_data()
-				humidor.disp_avg_sensor_data()
+				sensor_data = self.humidor.get_sensor_data()
+				self.humidor.print_sensor_data()
+				if self.screenon != None:
+					if self.screenon > 10:
+						self.humidor._disp.turnoff()
+					else:
+						self.screenon += 1
+				#self.humidor.disp_avg_sensor_data()
 				time.sleep(10)
 		except KeyboardInterrupt:
 			GPIO.cleanup()
