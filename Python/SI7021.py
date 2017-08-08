@@ -58,13 +58,13 @@ class SI7021(object):
 
 	# Read the humidity from the sensor
 	def get_humidity(self):
-		self.reset()
 		# Hold master mode not working reliably
 		#humidity = self.bus.read_word_data(self.si7021, self.READ_HUMIDITY_HM)
 		#humidity = ((humidity & 0xff) << 8) | (humidity >> 8)
 		#humidity = 125. * humidity  / 65536. - 6
 		humidity = 0
 		while humidity <= 0:
+			self.reset()
 			self.bus.write_byte(self.si7021, self.READ_HUMIDITY_NH)
 			sleep(self.sleep)
 			h1 = self.bus.read_byte(self.si7021)
