@@ -1,4 +1,4 @@
-import logging
+from logger import MLOGGER
 from time import sleep
 
 class SI7021(object):
@@ -25,7 +25,7 @@ class SI7021(object):
 		self.bus = bus
 		self.si7021 = si7021
 		self.sleep = sleep_interval
-		self._log = logging.getLogger(__name__)
+		self._log = MLOGGER(__name__)
 
 	# This doesn't work, here as a placeholder
 	def _dontcall_get_firmware(self):
