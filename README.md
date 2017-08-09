@@ -1,12 +1,20 @@
 # Humidor
 
 curl -sLS https://apt.adafruit.com/add | sudo bash
-sudo apt-get install node npm
+sudo apt-get update
+sudo apt-get install node npm build-essential python-dev git scons swig
 npm install aws-iot-device-sdk
 
 # https://github.com/adafruit/Adafruit_Python_SSD1306
 git pull https://github.com/adafruit/Adafruit_Python_SSD1306.git
-cd Adafruit_Python_SSD1306 && python setup.py && python3 setup.py
+cd Adafruit_Python_SSD1306 && sudo python setup.py install && sudo python3 setup.py install
+
+cd ~
+git clone https://github.com/jgarff/rpi_ws281x.git
+cd rpi_ws281x
+scons
+cd python
+sudo python setup.py install && sudo python3 setup.py install
 
 RPI Pin Setup
 
@@ -41,7 +49,7 @@ Pin 28	::	BCM-01	(ID_SC)			::	NC
 Pin 29	::	BCM-05					::	Door open Sensor
 Pin 30	::	Ground					::	Ground BUS
 Pin 31	::	BCM-06					::	PIR Sensor Output
-Pin 32	::	BCM-12	(PWM-0)			::	NC
+Pin 32	::	BCM-12	(PWM-0)			::	NeoPixel
 Pin 33	::	BCM-13	(PWM-1)			::	NC
 Pin 34	::	Ground					::	Ground BUS
 Pin 35	::	BCM-19	(SPI-1 MISO)	::	NC

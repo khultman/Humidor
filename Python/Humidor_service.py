@@ -4,7 +4,7 @@ import argparse
 from Humidor import Humidor
 import logging
 from logger import MLOGGER
-
+from Pixel import Pixel
 import RPi.GPIO as GPIO
 import sys
 import time
@@ -19,6 +19,9 @@ SPI_DEVICE = 0		# SPI Device
 sensors = 3			# The number of sensors, min 1 max 8; corresponds to TCA9548 Channels; Sensors must start on channel 0 and increment from there
 DoorPin = 5			# GPIO of Door Sensor
 PirSensor = 6		# GPIO of PIR Sensor
+PixelPin = 12		# Pin of NeoPixel Controller
+PixelPixels = 30	# Number of NeoPixels on strip
+
 
 
 class Humidor_Service(object):
@@ -27,6 +30,7 @@ class Humidor_Service(object):
 		self._logging_variables['instance_id'] = self.__class__.__name__
 		self._log = logging.getLogger(self.__class__.__name__)
 		self.humidor = Humidor(busID, sensors, RST, DC, SPI_PORT, SPI_DEVICE)
+		self._pixel = Pixel(PixelPixels, PixelPin)
 		self.screenon = None
 
 	def get_cli_args(self, args=None):
