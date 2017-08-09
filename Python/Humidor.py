@@ -41,7 +41,7 @@ if sys.version_info[0] < 3:
 class Humidor(object):
 	def __init__(	self, i2cBUS = busID, sensors = sensors, 
 					rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE, display_cycles = 10,
-					pixel_count = 30, pixel_pin = 12):
+					pixel_count = 30, pixel_pin = 12, DoorPin = 5, PirSensor = 6):
 		# Setup Logging
 		self._log = logging.getLogger(__name__)
 		self._logging_variables = {}
@@ -62,10 +62,12 @@ class Humidor(object):
 		self._spiDevice = spiDevice
 		self._disp = disp = SSD1306_64_48(rst=self._rst, dc=self._dc, spi=SPI.SpiDev(self._spiPort, self._spiDevice, max_speed_hz=8000000))
 		# Setup the GPIO Callback, door open and motion detection
-		GPIO.setup(DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-		GPIO.setup(PirSensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-		GPIO.add_event_detect(DoorPin, GPIO.FALLING, callback=self.door_open, bouncetime=300)
-		GPIO.add_event_detect(PirSensor, GPIO.RISING, callback=self.motion_detect, bouncetime=10000)
+		self._DoorPin = DoorPin
+		self._PirSensor = PirSensor
+		GPIO.setup(self._DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+		GPIO.setup(self._PirSensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+		GPIO.add_event_detect(self._DoorPin, GPIO.FALLING, callback=self.door_open, bouncetime=300)
+		GPIO.add_event_detect(self._PirSensor, GPIO.RISING, callback=self.motion_detect, bouncetime=10000)
 		# Setup the Neopixel strip
 		self._pixel_count = pixel_count
 		self._pixel_pin = pixel_pin

@@ -35,7 +35,7 @@ class Humidor_Service(object):
 		self._log = logging.getLogger(self.__class__.__name__)
 		self.humidor = Humidor(	self._args.busID, self._args.sensors,
 								self._args.RST, self._args.DC, self._args.SPI_PORT, self._args.SPI_DEVICE, self._args.display_cycles,
-								self._args.PixelPixels, self._args.PixelPin)
+								self._args.PixelPixels, self._args.PixelPin, self._args.DoorPin, self._args.PirSensor)
 
 	def get_cli_args(self, args=None):
 		parser = argparse.ArgumentParser(description='Run the Humidor service')
