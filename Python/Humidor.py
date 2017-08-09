@@ -156,6 +156,24 @@ class Humidor(object):
 		self._sensor_data = [temp_c, temp_f, humidity]
 		return [temp_c, temp_f, humidity]
 
+	# frontend to get_sensor_data
+	# returns a dictionary instead of multi-dimensional list
+	def get_sensor_data_dict(self):
+		data = self.get_sensor_data()
+		ndata = {}
+		for i in range(self.sensors):
+			ndata['sensor'+i] = {}
+			ndata['sensor'+i]['temp_c'] = data[0][i]
+			ndata['sensor'+i]['temp_f'] = data[1][i]
+			ndata['sensor'+i]['humidity'] = data[2][i]
+		ndata['average'] = {}
+		ndata['average']['temp_c'] = data[0][self.sensors]
+		ndata['average']['temp_f'] = data[1][self.sensors]
+		ndata['average']['humidity'] = data[2][self.sensors]
+		return ndata
+
+
+
 	# Read the sensor data from an individual channel
 	def read(self, channel = 0):
 		self._multiplexor.select_channel(channel)

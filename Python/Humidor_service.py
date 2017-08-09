@@ -59,7 +59,7 @@ class Humidor_Service(object):
 								action="store",
 								dest="busID",
 								default=1)
-		basic_1306 = basic_cfg.add_argument_group('SSD1306 Configuration')
+		basic_1306 = parser.add_argument_group('SSD1306 Configuration')
 		basic_1306.add_argument("-rst",
 								help="GPIO of SSD1306 Reset pin, default 24",
 								type=int,
@@ -84,15 +84,15 @@ class Humidor_Service(object):
 								action="store",
 								dest="SPI_DEVICE",
 								default=0)
-		basic_sens = basic_cfg.add_argument_group("Sensor Configuration")
+		basic_sens = parser.add_argument_group("Sensor Configuration")
 		basic_sens.add_argument("-ss", "--sensors",
 								help="The number of sensors, min 1 max 8; corresponds to TCA9548 channels, starting on 0",
 								type=int,
 								action="store",
 								dest="sensors",
-								#choices=range(1,9),
+								choices=range(1,9),
 								default=3)
-		basic_gpio = basic_cfg.add_argument_group("GPIO Configuration")
+		basic_gpio = parser.add_argument_group("GPIO Configuration")
 		basic_gpio.add_argument("-dp", "--doorpin",
 								help="GPIO of Door Pin, default 5",
 								type=int,
@@ -105,19 +105,26 @@ class Humidor_Service(object):
 								action="store",
 								dest="PirSensor",
 								default=6)
-		basic_pix = basic_cfg.add_argument_group('Neopixel Configuration')
+		basic_pix = parser.add_argument_group('Neopixel Configuration')
 		basic_pix.add_argument(	"-pp", "--pixelpin",
 								help="GPIO of NeoPixel Controller",
 								type=int,
 								action="store",
 								dest="PixelPin",
 								default="12")
-		basic_pix.add_argument(	"-pixels",
+		basic_pix.add_argument(	"--pixels",
 								help="The number of pixels connected to the strip",
 								type=int,
 								action="store",
 								dest="PixelPixels",
 								default=30)
+		basic_pix.add_argument(	"--pixelchannel",
+								help="PWM Channel of NeoPixel",
+								type=int,
+								choices=[0,1],
+								action="store",
+								dest="pixel_channel",
+								default=0)
 		# AWS IoT Config
 		aws = parser.add_argument_group('AWS IoT')
 		aws.add_argument(	"-e", "--endpoint",
@@ -182,12 +189,13 @@ class Humidor_Service(object):
 		try:
 			self._log.debug("Entering main loop", extra=self._logging_variables)
 			while True:
-				sensor_data = self.humidor.get_sensor_data()
+				sensor_data = self.humidor.get_sensor_data_dict()
 				self.humidor.print_sensor_data()
 				self.humidor.display_data()
 				time.sleep(self._args.cycle)
 		except KeyboardInterrupt:
 			self.humidor.cleanup()
+			pass
 
 
 if __name__ == '__main__':
