@@ -26,7 +26,7 @@ class IoT(object):
 		else:
 			self._AWSIoTMQTTClient = AWSIoTMQTTClient(self._clientID)
 			self._AWSIoTMQTTClient.configureEndpoint(self._endpoint, 8883)
-			self._AWSIoTMQTTClient.configureCredentials(self._rootCAPath, self._privateKeyPath, self._certificatePath)
+			self._AWSIoTMQTTClient.configureCredentials(self._rootCAPath, self._privatekeyPath, self._certificatePath)
 		self._AWSIoTMQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
 		self._AWSIoTMQTTClient.configureOfflinePublishQueueing(-1)
 		self._AWSIoTMQTTClient.configureDrainingFrequency(2)
