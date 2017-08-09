@@ -33,6 +33,8 @@ class Humidor_Service(object):
 		self._logging_variables = {}
 		self._logging_variables['instance_id'] = self.__class__.__name__
 		self._log = logging.getLogger(self.__class__.__name__)
+		self._log.debug("_args passed in", extra=self._logging_variables)
+		self._log.debug(vars(self._args), extra=self._logging_variables)
 		self.humidor = Humidor(	self._args.busID, self._args.sensors,
 								self._args.RST, self._args.DC, self._args.SPI_PORT, self._args.SPI_DEVICE, self._args.display_cycles,
 								self._args.PixelPixels, self._args.PixelPin, self._args.DoorPin, self._args.PirSensor)
