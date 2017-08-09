@@ -1,6 +1,5 @@
 # Humidor.py
-# Load the collected data into a local database.
-# Periodically sync the local DB to the cloud.
+# Directly interact with the hardware
 
 # This is designed to use the SI7021 sensor
 # 3 Sensors will be used per humidor
@@ -13,6 +12,9 @@ import logging
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
+
+from Pixel import Pixel
+import RPi.GPIO as GPIO
 
 from SI7021 import SI7021
 from SSD1306 import SSD1306_64_48
@@ -37,20 +39,37 @@ if sys.version_info[0] < 3:
 	sys.setdefaultencoding('utf-8')
 
 class Humidor(object):
-	def __init__(self, i2cBUS = busID, sensors = sensors, rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE):
+	def __init__(	self, i2cBUS = busID, sensors = sensors, 
+					rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE, display_cycles = 10,
+					pixel_count = 30, pixel_pin = 12):
+		# Setup Logging
 		self._log = logging.getLogger(__name__)
 		self._logging_variables = {}
 		self._logging_variables['instance_id'] = self.__class__.__name__
+		# Required for displaying the degree sign on screen and console/logs
 		self._degS = u'\N{DEGREE SIGN}'
+		# Setup the multiplexor and connected sensors
 		self._busID = i2cBUS
 		self._rst = rst
 		self._dc = dc
-		self._spiPort = spiPort
-		self._spiDevice = spiDevice
 		self.sensors = sensors
 		self._multiplexor = TCA9548A(SMBus(self._busID), 0.1)
 		self._sensor = SI7021(SMBus(self._busID), 0.1)
+		# Setup the 64x48 display
+		self._screenon = 1 # Display status tracking
+		self.display_cycles = display_cycles
+		self._spiPort = spiPort
+		self._spiDevice = spiDevice
 		self._disp = disp = SSD1306_64_48(rst=self._rst, dc=self._dc, spi=SPI.SpiDev(self._spiPort, self._spiDevice, max_speed_hz=8000000))
+		# Setup the GPIO Callback, door open and motion detection
+		GPIO.setup(DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+		GPIO.setup(PirSensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+		GPIO.add_event_detect(DoorPin, GPIO.FALLING, callback=self.door_open, bouncetime=300)
+		GPIO.add_event_detect(PirSensor, GPIO.RISING, callback=self.motion_detect, bouncetime=10000)
+		# Setup the Neopixel strip
+		self._pixel_count = pixel_count
+		self._pixel_pin = pixel_pin
+		self._pixel = Pixel(self._pixel_count, self.pixel_pin)
 
 	def _clear(self):
 		self._sensor_data = [None] * 3
@@ -58,6 +77,15 @@ class Humidor(object):
 	# Shorthand method for displaying the averaged sensor data
 	def disp_avg_sensor_data(self):
 		self.disp_sensor_data(self._sensor_data[2][self.sensors], self._sensor_data[1][self.sensors], self._sensor_data[0][self.sensors])
+
+	# Self checking data display
+	def disp_data(self):
+		if self._screenon != None:
+			if self._screenon > self.display_cycles:
+				self._disp.set_display_off()
+			else:
+				self._screenon += 1
+				self.disp_avg_sensor_data()
 
 	# Write the given sensor data to the screen
 	def disp_sensor_data(self, humidity = 0, temp_f = 0, temp_c = 0):
@@ -88,6 +116,17 @@ class Humidor(object):
 
 		self._disp.image(image)
 		self._disp.display()
+
+	# Catch the door opening event
+	def door_open(self, channel):
+		self._log.warn("Door Opened, channel {0}".format(channel), extra=self._logging_variables)
+		self._pixel
+
+	# Catch the motion detection event
+	def motion_detect(self, channel):
+		self._log.warn("PIR Motion detected, channel {0}".format(channel), extra=self._logging_variables)
+		self.humidor.disp_avg_sensor_data()
+		self.screenon = 1
 
 	# Reads the sensor data from all sensor channels
 	# Returns multidimensional list for external processing

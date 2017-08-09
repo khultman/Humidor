@@ -26,6 +26,10 @@ cd python
 sudo python setup.py install && sudo python3 setup.py install
 ```
 
+```bash
+git clone https://github.com/aws/aws-iot-device-sdk-python.git
+```
+
 ## Hardware Setup
 
 ### Raspberry Pi Zero-w Pin Setup

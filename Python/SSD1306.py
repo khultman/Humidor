@@ -302,7 +302,7 @@ class SSD1306_64_48(SSD1306Base):
         else:
             self.command(SSD1306_NORMALDISPLAY)
 
-    def turnoff(self):
+    def set_display_off(self):
         self.command(SSD1306_DISPLAYOFF)
 
     def display(self):
