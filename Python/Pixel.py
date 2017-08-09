@@ -25,7 +25,7 @@ class Pixel(object):
 		self._led_channel = channel
 		self._led_strip = strip
 		self._strip = Adafruit_NeoPixel(self._led_count, self._led_pin, self._led_frequency, 
-										self._led_dma, self._led_invert, Lself._led_brightness,
+										self._led_dma, self._led_invert, self._led_brightness,
 										self._led_channel, self._led_strip)
 		self._strip.begin()
 
@@ -85,7 +85,7 @@ class Pixel(object):
 				for i in range(0, self._strip.numPixels(), 3):
 					self._strip.setPixelColor(i+q, 0)
 
-	
+
 
 	def wheel(self, pos):
 		# Generate rainbow colors across 0-255 positions.
