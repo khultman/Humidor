@@ -29,12 +29,27 @@ class Pixel(object):
 										self._led_channel, self._led_strip)
 		self._strip.begin()
 
+	
 	def color_wipe(self, color, wait_ms = 50):
 		# Wipe color across display a pixel at a time.
 		for i in range(self._strip.numPixels()):
 			self._strip.setPixelColor(i, color)
 			self._strip.show()
 			time.sleep(wait_ms/1000.0)
+
+	def red_wipe(self):
+		self.color_wipe(Color(255, 0, 0))
+
+	def blue_wipe(self):
+		self.color_wipe(Color(0, 255, 0))
+
+	def green_wipe(self):
+		self.color_wipe(Color(0, 0, 255))
+
+	def white_wipe(self):
+		self.color_wipe(Color(127, 127, 127))
+
+
 
 	def chase(self, color, wait_ms=50, iterations=10):
 		# Movie theater light style chaser animation.
@@ -46,6 +61,31 @@ class Pixel(object):
 				time.sleep(wait_ms/1000.0)
 				for i in range(0, strip.numPixels(), 3):
 					self._strip.setPixelColor(i+q, 0)
+
+	def red_chase(self):
+		self.chase(Color(255, 0, 0))
+
+	def blue_chase(self):
+		self.chase(Color(0, 255, 0))
+
+	def green_chase(self):
+		self.chase(Color(0, 0, 255))
+
+	def white_chase(self):
+		self.chase(Color(127, 127, 127))
+
+	def rainbow_chase(self, wait_ms=50):
+		# Rainbow movie theater light style chaser animation.
+		for j in range(256):
+			for q in range(3):
+				for i in range(0, self._strip.numPixels(), 3):
+					self._strip.setPixelColor(i+q, wheel((i+j) % 255))
+				self._strip.show()
+				time.sleep(wait_ms/1000.0)
+				for i in range(0, self._strip.numPixels(), 3):
+					self._strip.setPixelColor(i+q, 0)
+
+	
 
 	def wheel(self, pos):
 		# Generate rainbow colors across 0-255 positions.
@@ -74,15 +114,6 @@ class Pixel(object):
 			self._strip.show()
 			time.sleep(wait_ms/1000.0)
 
-	def theater_chase_rainbow(self, wait_ms=50):
-		# Rainbow movie theater light style chaser animation.
-		for j in range(256):
-			for q in range(3):
-				for i in range(0, self._strip.numPixels(), 3):
-					self._strip.setPixelColor(i+q, wheel((i+j) % 255))
-				self._strip.show()
-				time.sleep(wait_ms/1000.0)
-				for i in range(0, self._strip.numPixels(), 3):
-					self._strip.setPixelColor(i+q, 0)
+	
 
 
