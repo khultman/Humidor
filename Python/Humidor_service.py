@@ -2,7 +2,7 @@
 # Must run as root
 
 import argparse
-
+from AwSIoT import IoT
 from Humidor import Humidor
 import logging
 from logger import MLOGGER
@@ -36,6 +36,8 @@ class Humidor_Service(object):
 		self.humidor = Humidor(	self._args.busID, self._args.sensors,
 								self._args.RST, self._args.DC, self._args.SPI_PORT, self._args.SPI_DEVICE, self._args.display_cycles,
 								self._args.PixelPixels, self._args.PixelPin, self._args.DoorPin, self._args.PirSensor)
+		self.aws = IoT( self._args.aws_host, self._args.aws_rootCAPath, self._args.aws_certificatePath, self._args.aws_privateKeyPath,
+						self._args.aws_useWebsocket, self._args.aws_clientId, self._args.aws_topic )
 
 	def get_cli_args(self, args=None):
 		parser = argparse.ArgumentParser(description='Run the Humidor service')
@@ -192,6 +194,7 @@ class Humidor_Service(object):
 				sensor_data = self.humidor.get_sensor_data_dict()
 				self.humidor.print_sensor_data()
 				self.humidor.display_data()
+				self.aws.publish_dict(sensor_data)
 				time.sleep(self._args.cycle)
 		except KeyboardInterrupt:
 			self.humidor.cleanup()
