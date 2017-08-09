@@ -5,13 +5,13 @@ import sys
 import time
 
 class IoT(object):
-	def __init__(self, host, rootCAPath, certificatePath, privatekeyPath, useWebsocket, clientId, topic):
+	def __init__(self, endpoint, rootCAPath, certificatePath, privatekeyPath, useWebsocket, clientId, topic):
 		# Setup Logging
 		self._log = logging.getLogger(__name__)
 		self._logging_variables = {}
 		self._logging_variables['instance_id'] = self.__class__.__name__
 		# Read in passed vars
-		self._host = host
+		self._endpoint = endpoint
 		self._rootCAPath = rootCAPath
 		self._certificatePath = certificatePath
 		self._privatekeyPath = privatekeyPath
@@ -21,11 +21,11 @@ class IoT(object):
 		# Init AWSIoTMQTTClient
 		if self._useWebsocket:
 			self._AWSIoTMQTTClient = AWSIoTMQTTClient(self._clientID, useWebsocket=True)
-			self._AWSIoTMQTTClient.configureEndpoint(self._host, 443)
+			self._AWSIoTMQTTClient.configureEndpoint(self._endpoint, 443)
 			self._AWSIoTMQTTClient.configureCredentials(self._rootCAPath)
 		else:
 			self._AWSIoTMQTTClient = AWSIoTMQTTClient(self._clientID)
-			self._AWSIoTMQTTClient.configureEndpoint(self._host, 8883)
+			self._AWSIoTMQTTClient.configureEndpoint(self._endpoint, 8883)
 			self._AWSIoTMQTTClient.configureCredentials(self._rootCAPath, self._privateKeyPath, self._certificatePath)
 		self._AWSIoTMQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
 		self._AWSIoTMQTTClient.configureOfflinePublishQueueing(-1)
