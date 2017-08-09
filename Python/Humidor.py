@@ -71,7 +71,7 @@ class Humidor(object):
 		# Setup the Neopixel strip
 		self._pixel_count = pixel_count
 		self._pixel_pin = pixel_pin
-		self._pixel = Pixel(self._pixel_count, self.pixel_pin)
+		self._pixel = Pixel(self._pixel_count, self._pixel_pin)
 
 	def _clear(self):
 		self._sensor_data = [None] * 3
