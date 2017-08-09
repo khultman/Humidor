@@ -131,6 +131,11 @@ class Humidor_Service(object):
 							required=True,
 							dest="aws_rootCAPath")
 		aws_meg = aws.add_mutually_exclusive_group()
+		aws_meg.add_argument(	"-w", "--websocket",
+								help="Use MQTT over WebSocket",
+								action="store_true",
+								dest="aws_useWebsocket",
+								default=False)
 		aws_meg_cert = aws_meg.add_argument_group('Certificate Authentication')
 		aws_meg_cert.add_argument(	"-c", "--cert",
 									help="Certificate file path",
@@ -140,12 +145,6 @@ class Humidor_Service(object):
 									help="Private key file path",
 									action="store",
 									dest="aws_privateKeyPath")
-		aws_meg_socket = aws_meg.add_argument_group('Websocket')
-		aws_meg_socket.add_argument("-w", "--websocket",
-									help="Use MQTT over WebSocket",
-									action="store_true",
-									dest="aws_useWebsocket",
-									default=False)
 		aws.add_argument(	"-id", "--clientId",
 							help="Targeted client id",
 							action="store",
