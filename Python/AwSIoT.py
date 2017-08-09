@@ -5,7 +5,7 @@ import sys
 import time
 
 class IoT(object):
-	def __init__(self, host, rootCAPath, certificatePath, privatekeyPath, useWebsocket = False, clientId, topic):
+	def __init__(self, host, rootCAPath, certificatePath, privatekeyPath, useWebsocket, clientId, topic):
 		# Setup Logging
 		self._log = logging.getLogger(__name__)
 		self._logging_variables = {}
