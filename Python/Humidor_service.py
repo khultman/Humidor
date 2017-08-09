@@ -46,7 +46,7 @@ class Humidor_Service(object):
 								action="store",
 								dest="cycle",
 								default=10)
-		basic_cfg.add_argument(	"-dc", "--displaycycles",
+		basic_cfg.add_argument(	"-dcy", "--displaycycles",
 								help="How many cycles should the display be on after motion, defaults to 10",
 								action="store",
 								dest="display_cycles",
