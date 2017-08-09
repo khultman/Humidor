@@ -43,66 +43,78 @@ class Humidor_Service(object):
 		basic_cfg = parser.add_argument_group('Humidor Configuration')
 		basic_cfg.add_argument(	"-cy", "--cycle",
 								help="Time in seconds between each loop cycle, defaults to 10",
+								type=int,
 								action="store",
 								dest="cycle",
 								default=10)
 		basic_cfg.add_argument(	"-dcy", "--displaycycles",
 								help="How many cycles should the display be on after motion, defaults to 10",
+								type=int,
 								action="store",
 								dest="display_cycles",
 								default=10)
 		basic_cfg.add_argument(	"-bid", "--busID",
 								help="The I2C Bus ID, default 1",
+								type=int,
 								action="store",
 								dest="busID",
 								default=1)
 		basic_1306 = basic_cfg.add_argument_group('SSD1306 Configuration')
 		basic_1306.add_argument("-rst",
 								help="GPIO of SSD1306 Reset pin, default 24",
+								type=int,
 								action="store",
 								dest="RST",
 								default="24")
 		basic_1306.add_argument("-dc",
 								help="GPIO of SSD1306 Display DC Pin, default 23",
+								type=int,
 								action="store",
 								dest="DC",
 								default="23")
 		basic_1306.add_argument("-sp", "--spi_port",
 								help="SPI Port, default 0",
+								type=int,
 								action="store",
 								dest="SPI_PORT",
 								default=0)
 		basic_1306.add_argument("-sd", "--spi_device",
 								help="SPI Device, default 0",
+								type=int,
 								action="store",
 								dest="SPI_DEVICE",
 								default=0)
 		basic_sens = basic_cfg.add_argument_group("Sensor Configuration")
 		basic_sens.add_argument("-ss", "--sensors",
 								help="The number of sensors, min 1 max 8; corresponds to TCA9548 channels, starting on 0",
+								type=int,
 								action="store",
 								dest="sensors",
-								choices=range(1,9),
+								#choices=range(1,9),
 								default=3)
 		basic_gpio = basic_cfg.add_argument_group("GPIO Configuration")
 		basic_gpio.add_argument("-dp", "--doorpin",
 								help="GPIO of Door Pin, default 5",
+								type=int,
 								action="store",
 								dest="DoorPin",
 								default=5)
 		basic_gpio.add_argument("-pr", "--pirpin",
 								help="GPIO of PIR Pin, default 6",
+								type=int,
 								action="store",
 								dest="PirSensor",
 								default=6)
 		basic_pix = basic_cfg.add_argument_group('Neopixel Configuration')
 		basic_pix.add_argument(	"-pp", "--pixelpin",
 								help="GPIO of NeoPixel Controller",
+								type=int,
 								action="store",
 								dest="PixelPin",
 								default="12")
 		basic_pix.add_argument(	"-pixels",
 								help="The number of pixels connected to the strip",
+								type=int,
 								action="store",
 								dest="PixelPixels",
 								default=30)
