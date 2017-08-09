@@ -126,7 +126,7 @@ class Humidor(object):
 	def motion_detect(self, channel):
 		self._log.warn("PIR Motion detected, channel {0}".format(channel), extra=self._logging_variables)
 		self.humidor.disp_avg_sensor_data()
-		self.screenon = 1
+		self._screenon = 1
 
 	# Reads the sensor data from all sensor channels
 	# Returns multidimensional list for external processing
