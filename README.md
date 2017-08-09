@@ -12,8 +12,10 @@ npm install aws-iot-device-sdk
 
 #### https://github.com/adafruit/Adafruit_Python_SSD1306
 ```bash
+cd ~
 git pull https://github.com/adafruit/Adafruit_Python_SSD1306.git
-cd Adafruit_Python_SSD1306 && sudo python setup.py install && sudo python3 setup.py install
+cd Adafruit_Python_SSD1306
+sudo python setup.py install && sudo python3 setup.py install
 ```
 
 #### Python WS281x/Neopixel Driver
@@ -26,8 +28,12 @@ cd python
 sudo python setup.py install && sudo python3 setup.py install
 ```
 
+#### AWS IoT Python SDK
 ```bash
+cd ~
 git clone https://github.com/aws/aws-iot-device-sdk-python.git
+cd aws-iot-device-sdk-python/
+sudo python setup.py install && sudo python3 setup.py install
 ```
 
 ## Hardware Setup

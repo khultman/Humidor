@@ -169,6 +169,17 @@ class Humidor(object):
 		print("Temperature in Celsius is : {0}C".format(round(temp_c,2)))
 		print("")
 
+	def reset_sensors(self):
+		for i in range(0, self.sensors):
+			self._multiplexor.select_channel(i)
+			self._sensor.reset()
+		self._multiplexor.select_channel(0)
+
+	def cleanup(self):
+		self._disp.hard_clear()
+		self._disp.set_display_off()
+		self.reset_sensors()
+		GPIO.cleanup()
 
 	# Writes the data stored in self._sensor_data to stdout
 	def print_sensor_data(self):
