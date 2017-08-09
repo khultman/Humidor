@@ -63,8 +63,8 @@ class SSD1306Base(object):
                  gpio=None, spi=None, i2c_bus=None, i2c_address=SSD1306_I2C_ADDRESS,
                  i2c=None):
         self._log = logging.getLogger('Adafruit_SSD1306.SSD1306Base')
-        self._logging_variables = {}
-        self._logging_variables['instance_id'] = self.__class__.__name__
+        self._logging_variables = {}    # Modified from original library for logging consistancy through local app
+        self._logging_variables['instance_id'] = self.__class__.__name__    # Modified from original library for logging consistancy
         self._spi = None
         self._i2c = None
         self.width = width
@@ -81,19 +81,19 @@ class SSD1306Base(object):
             self._gpio.setup(self._rst, GPIO.OUT)
         # Handle hardware SPI
         if spi is not None:
-            self._log.debug('Using hardware SPI', extra=self._logging_variables)
+            self._log.debug('Using hardware SPI', extra=self._logging_variables)    # Modified from original library for logging consistancy
             self._spi = spi
             self._spi.set_clock_hz(8000000)
         # Handle software SPI
         elif sclk is not None and din is not None and cs is not None:
-            self._log.debug('Using software SPI', extra=self._logging_variables)
+            self._log.debug('Using software SPI', extra=self._logging_variables)    # Modified from original library for logging consistancy
             self._spi = SPI.BitBang(self._gpio, sclk, din, None, cs)
         # Handle hardware I2C
         elif i2c is not None:
-            self._log.debug('Using hardware I2C with custom I2C provider.', extra=self._logging_variables)
+            self._log.debug('Using hardware I2C with custom I2C provider.', extra=self._logging_variables)  # Modified from original library for logging consistancy
             self._i2c = i2c.get_i2c_device(i2c_address)
         else:
-            self._log.debug('Using hardware I2C with platform I2C provider.', extra=self._logging_variables)
+            self._log.debug('Using hardware I2C with platform I2C provider.', extra=self._logging_variables)    # Modified from original library for logging consistancy
             import Adafruit_GPIO.I2C as I2C
             if i2c_bus is None:
                 self._i2c = I2C.get_i2c_device(i2c_address)
@@ -226,7 +226,9 @@ class SSD1306Base(object):
                 contrast = 0xCF
 
 
-# 
+## Removed original library sub-classes for 128x64, etc... boards.
+
+# Added support for 64x48 Sparkfun breakout
 class SSD1306_64_48(SSD1306Base):
     def __init__(self, rst, dc=None, sclk=None, din=None, cs=None, gpio=None,
                  spi=None, i2c_bus=None, i2c_address=SSD1306_I2C_ADDRESS,
@@ -302,7 +304,7 @@ class SSD1306_64_48(SSD1306Base):
 
     def turnoff(self):
         self.command(SSD1306_DISPLAYOFF)
-    
+
     def display(self):
         """Write display buffer to physical display."""
         self.set_columnaddress(0)
