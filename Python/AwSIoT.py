@@ -37,7 +37,7 @@ class IoT(object):
 		self._AWSIoTMQTTClient.configureConnectDisconnectTimeout(10)
 		self._AWSIoTMQTTClient.configureMQTTOperationTimeout(5)
 		self._AWSIoTMQTTClient.connect()
-		self._AWSIoTMQTTClient.subscribe(topic, 1, self.subscribe_callback)
+		#self._AWSIoTMQTTClient.subscribe(topic, 1, self.subscribe_callback)
 
 	def subscribe_callback(self, client, userdata, message):
 		print("Received a new message: ")
