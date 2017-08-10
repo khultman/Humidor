@@ -51,5 +51,6 @@ class IoT(object):
 
 	def publish_dict(self, data):
 		data['clientID'] = self._clientID
+		data['time_stamp'] = time.time()
 		data = json.dumps(data)
 		self.publish(data)
