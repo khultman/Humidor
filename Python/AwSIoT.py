@@ -50,7 +50,7 @@ class IoT(object):
 		self._AWSIoTMQTTClient.publish(self._topic, message, 1)
 
 	def publish_dict(self, data):
-		data['clientID'] = self._clientID
+		data['humidor_id'] = self._clientID
 		data['time_stamp'] = time.time()
 		data = json.dumps(data)
 		self.publish(data)
