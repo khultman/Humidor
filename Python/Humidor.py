@@ -125,14 +125,21 @@ class Humidor(object):
 	# Catch the door opening event
 	def door_open(self, channel):
 		self._log.warn("Door Opened, channel {0}".format(channel), extra=self._logging_variables)
-		mqb = {}
-		mqb['door_opened_time'] = time.time()
-		self._aws.publish_dict(mqb)
+		event = {}
+		event['event'] = {}
+		event['event']['door_open'] = {}
+		event['event']['door_open']['time'] = time.time()
+		self._aws.publish_dict(event)
 		self._pixel
 
 	# Catch the motion detection event
 	def motion_detect(self, channel):
 		self._log.warn("PIR Motion detected, channel {0}".format(channel), extra=self._logging_variables)
+		event = {}
+		event['event'] = {}
+		event['event']['motion_detect'] = {}
+		event['event']['motion_detect']['time'] = time.time()
+		self._aws.publish_dict(event)
 		self.humidor.disp_avg_sensor_data()
 		self._screenon = 1
 
@@ -169,15 +176,16 @@ class Humidor(object):
 	def get_sensor_data_dict(self):
 		data = self.get_sensor_data()
 		ndata = {}
+		ndata['sensor_data'] = {}
 		for i in range(self.sensors):
-			ndata['sensor'+str(i)] = {}
-			ndata['sensor'+str(i)]['temp_c'] = data[0][i]
-			ndata['sensor'+str(i)]['temp_f'] = data[1][i]
-			ndata['sensor'+str(i)]['humidity'] = data[2][i]
-		ndata['average'] = {}
-		ndata['average']['temp_c'] = data[0][self.sensors]
-		ndata['average']['temp_f'] = data[1][self.sensors]
-		ndata['average']['humidity'] = data[2][self.sensors]
+			ndata['sensor_data']['sensor'+str(i)] = {}
+			ndata['sensor_data']['sensor'+str(i)]['temp_c'] = data[0][i]
+			ndata['sensor_data']['sensor'+str(i)]['temp_f'] = data[1][i]
+			ndata['sensor_data']['sensor'+str(i)]['humidity'] = data[2][i]
+		ndata['sensor_data']['average'] = {}
+		ndata['sensor_data']['average']['temp_c'] = data[0][self.sensors]
+		ndata['sensor_data']['average']['temp_f'] = data[1][self.sensors]
+		ndata['sensor_data']['average']['humidity'] = data[2][self.sensors]
 		return ndata
 
 
