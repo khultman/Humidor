@@ -195,7 +195,7 @@ class Humidor_Service(object):
 			while True:
 				sensor_data = self.humidor.get_sensor_data_dict()
 				self.humidor.print_sensor_data()
-				self.humidor.display_data()
+				self.humidor.disp_data()
 				self.aws.publish_dict(sensor_data)
 				time.sleep(self._args.cycle)
 		except KeyboardInterrupt:
