@@ -10,6 +10,10 @@ class IoT(object):
 		self._log = logging.getLogger(__name__)
 		self._logging_variables = {}
 		self._logging_variables['instance_id'] = self.__class__.__name__
+		self._streamHandler = logging.StreamHandler()
+		self._formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+		self._streamHandler.setFormatter(self._formatter)
+		self._log.addHandler(self._streamHandler)
 		# Read in passed vars
 		self._endpoint = endpoint
 		self._rootCAPath = rootCAPath
