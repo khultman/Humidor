@@ -129,6 +129,54 @@ TCA9548A
 | PIN SC7	|	NC						|
 
 
+## AWS Configuration
 
+### Dynamo DB
 
+Must have two table
+
+table1: Humidor_events
+
+```json
+	'Table name': 'Humidor_events',
+	'Primary partition key': 'humidor_id (String)',
+	'Primary sort key': 'time_stamp (Number)',
+	'Time to live attribute': 'DISABLED',
+	'Table status': 'Active'
+```
+
+table2: Humidor_Sensor_Data
+
+```json
+	'Table name': 'Humidor_Sensor_Data',
+	'Primary partition key': 'humidor_id (String)',
+	'Primary sort key': 'time_stamp (Number)',
+	'Time to live attribute': 'DISABLED',
+	'Table status': 'Active'
+```
+
+AWS IoT Rule 1: Humidor_Sensor_Data_Rule
+
+```SQL
+SELECT humidor_id, time_stamp, sensor_data FROM 'humidor' WHERE sensor_data.average.humidity >= 0
+```
+```json
+'Action': 'Split message into multiple columns of a database table (DynamoDBv2)'
+```
+```json
+'Table name': 'Humidor_Sensor_Data'
+'IAM_Role': 'Humidor_IoT_2_Dynamo'
+```
+AWS IoT Rule 2: Humidor_Event_Rule
+
+```SQL
+SELECT humidor_id, time_stamp, event FROM 'humidor' WHERE event.event_type = "motion_detect" OR event.event_type = "door_open"
+```
+```json
+'Action': 'Split message into multiple columns of a database table (DynamoDBv2)'
+```
+```json
+'Table name': 'Humidor_events'
+'IAM_Role': 'Humidor_IoT_2_Dynamo'
+```
 
