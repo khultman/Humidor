@@ -47,7 +47,7 @@ class IoT(object):
 		print("--------------\n\n")
 
 	def publish(self, message):
-		self.AWSIoTMQTTClient.publish(self._topic, message, 1)
+		self._AWSIoTMQTTClient.publish(self._topic, message, 1)
 
 	def publish_dict(self, data):
 		data = json.dumps(data)
