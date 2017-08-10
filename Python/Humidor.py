@@ -127,8 +127,8 @@ class Humidor(object):
 		self._log.warn("Door Opened, channel {0}".format(channel), extra=self._logging_variables)
 		event = {}
 		event['event'] = {}
-		event['event']['door_open'] = {}
-		event['event']['door_open']['time'] = time.time()
+		event['event']['event_type'] = "door_open"
+		event['event']['event_time'] = time.time()
 		self._aws.publish_dict(event)
 		self._pixel
 
@@ -137,8 +137,8 @@ class Humidor(object):
 		self._log.warn("PIR Motion detected, channel {0}".format(channel), extra=self._logging_variables)
 		event = {}
 		event['event'] = {}
-		event['event']['motion_detect'] = {}
-		event['event']['motion_detect']['time'] = time.time()
+		event['event']['event_type'] = "motion_detect"
+		event['event']['event_time'] = time.time()
 		self._aws.publish_dict(event)
 		self.humidor.disp_avg_sensor_data()
 		self._screenon = 1
