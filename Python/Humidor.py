@@ -164,10 +164,10 @@ class Humidor(object):
 		data = self.get_sensor_data()
 		ndata = {}
 		for i in range(self.sensors):
-			ndata['sensor'+i] = {}
-			ndata['sensor'+i]['temp_c'] = data[0][i]
-			ndata['sensor'+i]['temp_f'] = data[1][i]
-			ndata['sensor'+i]['humidity'] = data[2][i]
+			ndata['sensor'+str(i)] = {}
+			ndata['sensor'+str(i)]['temp_c'] = data[0][i]
+			ndata['sensor'+str(i)]['temp_f'] = data[1][i]
+			ndata['sensor'+str(i)]['humidity'] = data[2][i]
 		ndata['average'] = {}
 		ndata['average']['temp_c'] = data[0][self.sensors]
 		ndata['average']['temp_f'] = data[1][self.sensors]
