@@ -35,11 +35,11 @@ class Humidor_Service(object):
 		self._log = logging.getLogger(self.__class__.__name__)
 		self._log.debug("_args passed in", extra=self._logging_variables)
 		self._log.debug(vars(self._args), extra=self._logging_variables)
-		self.humidor = Humidor(	self._args.busID, self._args.sensors,
-								self._args.RST, self._args.DC, self._args.SPI_PORT, self._args.SPI_DEVICE, self._args.display_cycles,
-								self._args.PixelPixels, self._args.PixelPin, self._args.DoorPin, self._args.PirSensor)
 		self.aws = IoT( self._args.aws_Endpoint, self._args.aws_rootCAPath, self._args.aws_certificatePath, self._args.aws_privateKeyPath,
 						self._args.aws_useWebsocket, self._args.aws_clientId, self._args.aws_topic )
+		self.humidor = Humidor(	self._args.busID, self._args.sensors,
+								self._args.RST, self._args.DC, self._args.SPI_PORT, self._args.SPI_DEVICE, self._args.display_cycles,
+								self._args.PixelPixels, self._args.PixelPin, self._args.DoorPin, self._args.PirSensor, self._args.aws_clientID, self.aws)
 
 	def get_cli_args(self, args=None):
 		parser = argparse.ArgumentParser(description='Run the Humidor service')

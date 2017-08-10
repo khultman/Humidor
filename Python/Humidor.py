@@ -39,9 +39,9 @@ if sys.version_info[0] < 3:
 	sys.setdefaultencoding('utf-8')
 
 class Humidor(object):
-	def __init__(	self, i2cBUS = busID, sensors = sensors, 
+	def __init__(	self, i2cBUS = busID, sensors = sensors,
 					rst = RST, dc = DC, spiPort = SPI_PORT, spiDevice = SPI_DEVICE, display_cycles = 10,
-					pixel_count = 30, pixel_pin = 12, DoorPin = 5, PirSensor = 6):
+					pixel_count = 30, pixel_pin = 12, DoorPin = 5, PirSensor = 6, deviceID = "humidor", aws = None):
 		# Setup Logging
 		self._log = logging.getLogger(__name__)
 		self._logging_variables = {}
@@ -72,6 +72,9 @@ class Humidor(object):
 		self._pixel_count = pixel_count
 		self._pixel_pin = pixel_pin
 		self._pixel = Pixel(self._pixel_count, self._pixel_pin)
+		# AWS IoT Integration
+		self._deviceID = deviceID
+		self._aws = aws
 
 	def _clear(self):
 		self._sensor_data = [None] * 3
@@ -122,6 +125,9 @@ class Humidor(object):
 	# Catch the door opening event
 	def door_open(self, channel):
 		self._log.warn("Door Opened, channel {0}".format(channel), extra=self._logging_variables)
+		mqb = {}
+		mqb['door_opened_time'] = time.time()
+		self._aws.publish_dict(mqb)
 		self._pixel
 
 	# Catch the motion detection event
