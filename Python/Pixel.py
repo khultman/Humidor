@@ -1,5 +1,7 @@
+import math
 from neopixel import *
 import time
+
 
 # LED strip configuration:
 LED_COUNT      = 30      # Number of LED pixels.
@@ -52,7 +54,7 @@ class Pixel(object):
 
 	def side_wipe(self, color, wait_ms = 50):
 		# Wipe color from outside in
-		for i in range(self._strip.numPixels()/2):
+		for i in range(math.ceil(self._strip.numPixels()/2)):
 			self._strip.setPixelColor(i, color)
 			self._strip.setPixelColor(pixels-i, color)
 			self._strip.show()
