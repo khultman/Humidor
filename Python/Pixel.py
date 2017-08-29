@@ -50,6 +50,15 @@ class Pixel(object):
 		self.color_wipe(Color(127, 127, 127))
 
 
+	def side_wipe(self, color, wait_ms = 50):
+		# Wipe color from outside in
+		for i in range(self._strip.numPixels()/2):
+			self._strip.setPixelColor(i, color)
+			self._strip.setPixelColor(pixels-i, color)
+			self._strip.show()
+			time.sleep(wait_ms/1000.0)
+
+
 
 	def chase(self, color, wait_ms=50, iterations=10):
 		# Movie theater light style chaser animation.
