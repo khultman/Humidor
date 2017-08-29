@@ -70,7 +70,7 @@ class Pixel(object):
 					self._strip.setPixelColor(i+q, color)
 				self._strip.show()
 				time.sleep(wait_ms/1000.0)
-				for i in range(0, strip.numPixels(), 3):
+				for i in range(0, self._strip.numPixels(), 3):
 					self._strip.setPixelColor(i+q, 0)
 
 	def red_chase(self):
