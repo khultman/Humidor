@@ -56,7 +56,7 @@ class Pixel(object):
 		# Wipe color from outside in
 		for i in range(math.ceil(self._strip.numPixels()/2)):
 			self._strip.setPixelColor(i, color)
-			self._strip.setPixelColor(pixels-i, color)
+			self._strip.setPixelColor(self._strip.numPixels()-i, color)
 			self._strip.show()
 			time.sleep(wait_ms/1000.0)
 
