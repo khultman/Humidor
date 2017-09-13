@@ -66,7 +66,7 @@ class Humidor(object):
 		self._PirSensor = PirSensor
 		GPIO.setup(self._DoorPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 		GPIO.setup(self._PirSensor, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-		GPIO.add_event_detect(self._DoorPin, GPIO.FALLING, callback=self.door_open, bouncetime=300)
+		GPIO.add_event_detect(self._DoorPin, GPIO.RISING, callback=self.door_open, bouncetime=300)
 		GPIO.add_event_detect(self._PirSensor, GPIO.RISING, callback=self.motion_detect, bouncetime=10000)
 		# Setup the Neopixel strip
 		self._pixel_count = pixel_count
