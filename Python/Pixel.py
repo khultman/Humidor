@@ -32,6 +32,11 @@ class Pixel(object):
 		self._strip.begin()
 
 	
+	def clear(self):
+		for i in range(self._strip.numPixels()):
+			self._strip.setPixelColor(i, Color(0,0,0))
+		self._strip.show()
+	
 	def color_wipe(self, color, wait_ms = 50):
 		# Wipe color across display a pixel at a time.
 		for i in range(self._strip.numPixels()):

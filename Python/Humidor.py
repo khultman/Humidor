@@ -86,7 +86,10 @@ class Humidor(object):
 	# Self checking data display
 	def disp_data(self):
 		if self._screenon != None:
-			if self._screenon > self.display_cycles:
+			if self.display_cycles == 0:
+				self._screenon = 1
+				self.disp_avg_sensor_data()
+			elif self._screenon > self.display_cycles:
 				self._disp.set_display_off()
 			else:
 				self._screenon += 1
